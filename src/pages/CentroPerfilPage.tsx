@@ -4,10 +4,8 @@ import { useCentro } from '@/features/centros/queries'
 import { usePostsCentro } from '@/features/posts/queries'
 import { useCrearPost } from '@/features/posts/mutations'
 import { useRealtimePosts } from '@/features/posts/realtime'
-import { googleMapsDirectionsUrl } from '@/lib/geo'
 import { PostFeed } from '@/components/post/PostFeed'
 import { PostForm } from '@/components/post/PostForm'
-import { Button } from '@/components/ui/button'
 
 interface Props {
   user: AuthUser | null
@@ -64,11 +62,6 @@ export function CentroPerfilPage({ user }: Props) {
             </Link>
           )}
         </div>
-        <a href={googleMapsDirectionsUrl(centro.lat, centro.lng)} target="_blank" rel="noopener noreferrer">
-          <Button variant="default" size="default">
-            Cómo llegar
-          </Button>
-        </a>
         {centro.descripcion && (
           <p className="whitespace-pre-line text-sm text-muted-foreground">{centro.descripcion}</p>
         )}
@@ -101,4 +94,3 @@ function useRealtimeSafe(centroId: string): boolean {
   useRealtimePosts(centroId)
   return true
 }
-void Button

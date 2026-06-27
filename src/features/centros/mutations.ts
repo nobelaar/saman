@@ -9,8 +9,6 @@ export interface CrearCentroInput {
   direccion: string
   ciudad: string
   contacto?: string | null
-  lat: number
-  lng: number
   foto_portada?: string | null
 }
 
@@ -21,8 +19,6 @@ export interface EditarCentroInput {
   direccion?: string
   ciudad?: string
   contacto?: string | null
-  lat?: number
-  lng?: number
   foto_portada?: string | null
 }
 
@@ -39,8 +35,6 @@ export function useCrearCentro() {
           direccion: input.direccion,
           ciudad: input.ciudad,
           contacto: input.contacto ?? null,
-          lat: input.lat,
-          lng: input.lng,
           foto_portada: input.foto_portada ?? null,
         })
         .select()

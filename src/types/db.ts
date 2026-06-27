@@ -6,8 +6,6 @@ export interface CentroAcopio {
   direccion: string
   ciudad: string
   contacto: string | null
-  lat: number
-  lng: number
   foto_portada: string | null
   created_at: string
 }
@@ -21,7 +19,7 @@ export interface Post {
   created_at: string
 }
 
-export interface CentroCercano {
+export interface CentroResumen {
   id: string
   nombre: string
   descripcion: string | null
@@ -29,7 +27,6 @@ export interface CentroCercano {
   direccion: string
   foto_portada: string | null
   contacto: string | null
-  distancia_km: number
   ultimo_post_contenido: string | null
   ultimo_post_created_at: string | null
 }
@@ -46,10 +43,4 @@ export interface AuthUser {
 export interface AuthSession {
   user: AuthUser
   access_token: string
-}
-
-export interface NominatimResult {
-  lat: string
-  lon: string
-  display_name: string
 }

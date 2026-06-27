@@ -1,10 +1,10 @@
 import { render, screen, within } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, expect, it } from 'vitest'
-import type { CentroCercano } from '@/types/db'
+import type { CentroResumen } from '@/types/db'
 import { CentroGrid } from './CentroGrid'
 
-const centros: CentroCercano[] = [
+const centros: CentroResumen[] = [
   {
     id: 'c1',
     nombre: 'Centro Uno',
@@ -13,7 +13,6 @@ const centros: CentroCercano[] = [
     descripcion: null,
     foto_portada: null,
     contacto: null,
-    distancia_km: 1,
     ultimo_post_contenido: null,
     ultimo_post_created_at: null,
   },
@@ -25,7 +24,6 @@ const centros: CentroCercano[] = [
     descripcion: null,
     foto_portada: null,
     contacto: null,
-    distancia_km: 2,
     ultimo_post_contenido: null,
     ultimo_post_created_at: null,
   },
@@ -37,7 +35,6 @@ const centros: CentroCercano[] = [
     descripcion: null,
     foto_portada: null,
     contacto: null,
-    distancia_km: 3,
     ultimo_post_contenido: null,
     ultimo_post_created_at: null,
   },

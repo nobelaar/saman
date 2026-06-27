@@ -1,8 +1,8 @@
-import type { CentroCercano } from '@/types/db'
+import type { CentroResumen } from '@/types/db'
 import { CentroCard } from './CentroCard'
 
 interface Props {
-  centros: CentroCercano[]
+  centros: CentroResumen[]
   isLoading?: boolean
 }
 
@@ -17,7 +17,7 @@ export function CentroGrid({ centros, isLoading }: Props) {
   if (centros.length === 0) {
     return (
       <div data-testid="centro-grid" className="py-12 text-center text-muted-foreground">
-        Aún no hay centros registrados cerca.
+        Aún no hay centros registrados.
       </div>
     )
   }

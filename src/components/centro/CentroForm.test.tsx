@@ -5,19 +5,6 @@ import { describe, expect, it, vi, beforeEach } from 'vitest'
 import type { CentroAcopio } from '@/types/db'
 import { CentroForm, CentroFormValues } from './CentroForm'
 
-vi.mock('@/lib/geo', () => ({
-  geocodeAddress: vi.fn(async (q: string) =>
-    q === 'NO-RESULT'
-      ? null
-      : { lat: '10.488', lon: '-66.866', display_name: `${q}, Venezuela` }
-  ),
-  googleMapsDirectionsUrl: vi.fn(
-    (lat: number, lng: number) => `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`
-  ),
-}))
-
-import { geocodeAddress } from '@/lib/geo'
-
 const emptyInitial: Partial<CentroAcopio> = {}
 const existingInitial: Partial<CentroAcopio> = {
   nombre: 'Centro Existente',
@@ -25,8 +12,6 @@ const existingInitial: Partial<CentroAcopio> = {
   direccion: 'Av. Urdaneta',
   ciudad: 'Caracas',
   contacto: '@centro',
-  lat: 10.488,
-  lng: -66.866,
   foto_portada: 'https://cdn.example.com/p.jpg',
 }
 
@@ -72,7 +57,7 @@ describe('CentroForm', () => {
     expect(onSubmit).not.toHaveBeenCalled()
   })
 
-  it('geocodes the address on blur and fills lat/lng automatically', async () => {
+  it('submits with valid fields', async () => {
     const user = userEvent.setup()
     const onSubmit = vi.fn()
     render(
@@ -83,59 +68,12 @@ describe('CentroForm', () => {
     await user.type(screen.getByLabelText(/nombre/i), 'Mi Centro')
     await user.type(screen.getByLabelText(/dirección/i), 'Av. Urdaneta')
     await user.type(screen.getByLabelText(/ciudad/i), 'Caracas')
-    await user.tab()
-    await waitFor(() => expect(geocodeAddress).toHaveBeenCalled())
-    await waitFor(() => expect(onSubmit).not.toHaveBeenCalled())
-  })
-
-  it('submits with the geocoded lat/lng when everything is valid', async () => {
-    const user = userEvent.setup()
-    const onSubmit = vi.fn()
-    render(
-      <MemoryRouter>
-        <CentroForm initial={emptyInitial} onSubmit={onSubmit} submitting={false} />
-      </MemoryRouter>
-    )
-    await user.type(screen.getByLabelText(/nombre/i), 'Mi Centro')
-    await user.type(screen.getByLabelText(/dirección/i), 'Av. Urdaneta')
-    await user.type(screen.getByLabelText(/ciudad/i), 'Caracas')
-    await user.tab()
-    await waitFor(() => expect(geocodeAddress).toHaveBeenCalled())
-    await waitFor(() => {
-      const lat = screen.getByLabelText(/latitud/i)
-      const lng = screen.getByLabelText(/longitud/i)
-      return lat && lng
-    })
     await user.click(screen.getByRole('button', { name: /guardar|publicar|registrar|enviar/i }))
     await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1))
     const values: CentroFormValues = onSubmit.mock.calls[0][0]
     expect(values.nombre).toBe('Mi Centro')
     expect(values.ciudad).toBe('Caracas')
-    expect(values.lat).toBeCloseTo(10.488)
-    expect(values.lng).toBeCloseTo(-66.866)
-  })
-
-  it('allows manual lat/lng entry when the geocoding toggle is on', async () => {
-    const user = userEvent.setup()
-    const onSubmit = vi.fn()
-    render(
-      <MemoryRouter>
-        <CentroForm initial={emptyInitial} onSubmit={onSubmit} submitting={false} />
-      </MemoryRouter>
-    )
-    await user.type(screen.getByLabelText(/nombre/i), 'Mi Centro')
-    await user.type(screen.getByLabelText(/dirección/i), 'Av. Urdaneta')
-    await user.type(screen.getByLabelText(/ciudad/i), 'Caracas')
-    await user.click(screen.getByRole('checkbox', { name: /ingresar coordenadas manualmente/i }))
-    await user.clear(screen.getByLabelText(/latitud/i))
-    await user.type(screen.getByLabelText(/latitud/i), '10.2')
-    await user.clear(screen.getByLabelText(/longitud/i))
-    await user.type(screen.getByLabelText(/longitud/i), '-67.1')
-    await user.click(screen.getByRole('button', { name: /guardar|publicar|registrar|enviar/i }))
-    await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1))
-    const values: CentroFormValues = onSubmit.mock.calls[0][0]
-    expect(values.lat).toBeCloseTo(10.2)
-    expect(values.lng).toBeCloseTo(-67.1)
+    expect(values.direccion).toBe('Av. Urdaneta')
   })
 
   it('disables the submit button while submitting', () => {
@@ -159,7 +97,7 @@ describe('CentroForm', () => {
     const onSubmit = vi.fn()
     const { container } = render(
       <MemoryRouter>
-        <CentroForm initial={{ ...existingInitial, foto_portada: null } } onSubmit={onSubmit} submitting={false} />
+        <CentroForm initial={{ ...existingInitial, foto_portada: null }} onSubmit={onSubmit} submitting={false} />
       </MemoryRouter>
     )
     const input = container.querySelector('input[type="file"]') as HTMLInputElement

@@ -4,29 +4,20 @@ import type { ReactNode } from 'react'
 import { describe, expect, it } from 'vitest'
 import { createTestQueryClient } from '@/test/test-utils'
 import { fixtureCentro } from '@/test/mocks'
-import { useCentro, useCentrosCercanos } from './queries'
+import { useCentro, useCentros } from './queries'
 
 const wrapper = ({ children }: { children: ReactNode }) => (
   <QueryClientProvider client={createTestQueryClient()}>{children}</QueryClientProvider>
 )
 
-describe('useCentrosCercanos', () => {
-  it('returns centros ordered by ciudad when no coords (fallback)', async () => {
-    const { result } = renderHook(() => useCentrosCercanos(null), { wrapper })
+describe('useCentros', () => {
+  it('returns centros ordered by ciudad', async () => {
+    const { result } = renderHook(() => useCentros(), { wrapper })
     await waitFor(() => expect(result.current.data?.length).toBe(2))
     const ordered = result.current.data!.map((c) => c.ciudad)
     expect(ordered).toEqual([...ordered].sort())
     const first = result.current.data![0]
     expect(first.ultimo_post_contenido).not.toBeNull()
-    expect(first.distancia_km).toBe(0)
-  })
-
-  it('returns centros from the RPC when coords are provided', async () => {
-    const { result } = renderHook(() => useCentrosCercanos({ lat: 10.5, lng: -66.9 }), { wrapper })
-    await waitFor(() => expect(result.current.data?.length).toBe(1))
-    const item = result.current.data![0]
-    expect(typeof item.distancia_km).toBe('number')
-    expect(item.ultimo_post_contenido).not.toBeNull()
   })
 })
 

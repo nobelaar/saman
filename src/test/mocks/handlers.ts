@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw'
-import type { CentroAcopio, Post, CentroCercano } from '@/types/db'
+import type { CentroAcopio, Post } from '@/types/db'
 import {
   fixtureCentro,
   fixtureCentro2,
@@ -83,26 +83,6 @@ function responseObjectOrError(
 }
 
 const restHandlers = [
-  http.post(`${BASE}/rest/v1/rpc/centros_cercanos`, async ({ request }) => {
-    const body = (await request.json().catch(() => ({}))) as { user_lat?: number; user_lng?: number }
-    const result: CentroCercano[] = [
-      {
-        id: store.centros[0].id,
-        nombre: store.centros[0].nombre,
-        descripcion: store.centros[0].descripcion,
-        ciudad: store.centros[0].ciudad,
-        direccion: store.centros[0].direccion,
-        foto_portada: store.centros[0].foto_portada,
-        contacto: store.centros[0].contacto,
-        distancia_km: body.user_lat != null && body.user_lng != null ? 5.2 : 0,
-        ultimo_post_contenido: store.posts.find((p) => p.centro_id === store.centros[0].id)?.contenido ?? null,
-        ultimo_post_created_at:
-          store.posts.find((p) => p.centro_id === store.centros[0].id)?.created_at ?? null,
-      },
-    ]
-    return HttpResponse.json(result)
-  }),
-
   http.get(`${BASE}/rest/v1/centros_acopio`, ({ request }) => {
     const url = new URL(request.url)
     const { filters, order, select } = parseQuery(url)
@@ -134,8 +114,6 @@ const restHandlers = [
       direccion: payload.direccion ?? '',
       ciudad: payload.ciudad ?? '',
       contacto: payload.contacto ?? null,
-      lat: payload.lat ?? 0,
-      lng: payload.lng ?? 0,
       foto_portada: payload.foto_portada ?? null,
       created_at: new Date().toISOString(),
     }

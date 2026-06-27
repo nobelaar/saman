@@ -1,11 +1,11 @@
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, expect, it } from 'vitest'
-import type { CentroCercano } from '@/types/db'
+import type { CentroResumen } from '@/types/db'
 import { DEFAULT_FALLBACK_PHOTO } from '@/lib/constants'
 import { CentroCard } from './CentroCard'
 
-const centro: CentroCercano = {
+const centro: CentroResumen = {
   id: '00000000-0000-0000-0000-000000000001',
   nombre: 'Centro La Candelaria',
   descripcion: 'Iglesia habilitada',
@@ -13,12 +13,11 @@ const centro: CentroCercano = {
   direccion: 'Av. Urdaneta',
   foto_portada: null,
   contacto: null,
-  distancia_km: 5.2,
   ultimo_post_contenido: 'Necesitamos agua y pañales para esta noche',
   ultimo_post_created_at: '2025-01-12T12:00:00.000Z',
 }
 
-function renderCard(overrides: Partial<CentroCercano> = {}) {
+function renderCard(overrides: Partial<CentroResumen> = {}) {
   return render(
     <MemoryRouter>
       <CentroCard centro={{ ...centro, ...overrides }} />
@@ -32,16 +31,6 @@ describe('CentroCard', () => {
     const link = screen.getByRole('link')
     expect(link).toHaveTextContent('Centro La Candelaria')
     expect(link).toHaveAttribute('href', '/centro/00000000-0000-0000-0000-000000000001')
-  })
-
-  it('shows the distance in km when available', () => {
-    renderCard()
-    expect(screen.getByText(/5\.2 km/i)).toBeInTheDocument()
-  })
-
-  it('shows a dash when distance is unavailable', () => {
-    renderCard({ distancia_km: 0 })
-    expect(screen.getByText(/—/)).toBeInTheDocument()
   })
 
   it('renders the truncated preview of the last post', () => {

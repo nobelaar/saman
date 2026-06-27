@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom'
-import type { CentroCercano } from '@/types/db'
+import type { CentroResumen } from '@/types/db'
 import { DEFAULT_FALLBACK_PHOTO } from '@/lib/constants'
-import { formatDistance, truncate } from '@/lib/utils'
+import { truncate } from '@/lib/utils'
 
 interface Props {
-  centro: CentroCercano
+  centro: CentroResumen
 }
 
 export function CentroCard({ centro }: Props) {
@@ -24,9 +24,6 @@ export function CentroCard({ centro }: Props) {
       <div className="space-y-1 p-3">
         <h3 className="line-clamp-1 font-semibold">{centro.nombre}</h3>
         <p className="text-sm text-muted-foreground">{centro.ciudad}</p>
-        <p className="text-sm font-medium">
-          {centro.distancia_km > 0 ? formatDistance(centro.distancia_km) : '—'}
-        </p>
         {centro.ultimo_post_contenido && (
           <p className="line-clamp-2 text-sm text-muted-foreground">
             {truncate(centro.ultimo_post_contenido, 110)}

@@ -1,4 +1,4 @@
-import type { CentroAcopio, Post, CentroCercano } from '@/types/db'
+import type { CentroAcopio, Post, CentroResumen } from '@/types/db'
 
 export const fixtureCentro: CentroAcopio = {
   id: '00000000-0000-0000-0000-000000000001',
@@ -8,8 +8,6 @@ export const fixtureCentro: CentroAcopio = {
   direccion: 'Av. Urdaneta, Caracas',
   ciudad: 'Caracas',
   contacto: '@centrolacandelaria',
-  lat: 10.488,
-  lng: -66.866,
   foto_portada: null,
   created_at: '2025-01-10T12:00:00.000Z',
 }
@@ -18,12 +16,10 @@ export const fixtureCentro2: CentroAcopio = {
   id: '00000000-0000-0000-0000-000000000002',
   coordinador_id: '00000000-0000-0000-0000-0000000000bb',
   nombre: 'Centro Valencia Norte',
-  descripcion: 'unequipable grupo scout.',
+  descripcion: 'Grupo scout.',
   direccion: 'Av. Bolívar, Valencia',
   ciudad: 'Valencia',
   contacto: '0414-0000000',
-  lat: 10.162,
-  lng: -68.0,
   foto_portada: 'https://acopio-test.supabase.co/storage/v1/object/public/centros-fotos/test.jpg',
   created_at: '2025-01-11T09:00:00.000Z',
 }
@@ -46,7 +42,7 @@ export const fixturePost2: Post = {
   created_at: '2025-01-12T12:00:00.000Z',
 }
 
-export const fixtureCentroCercano: CentroCercano = {
+export const fixtureCentroResumen: CentroResumen = {
   id: fixtureCentro.id,
   nombre: fixtureCentro.nombre,
   descripcion: fixtureCentro.descripcion,
@@ -54,7 +50,6 @@ export const fixtureCentroCercano: CentroCercano = {
   direccion: fixtureCentro.direccion,
   foto_portada: fixtureCentro.foto_portada,
   contacto: fixtureCentro.contacto,
-  distancia_km: 5.2,
   ultimo_post_contenido: fixturePost2.contenido,
   ultimo_post_created_at: fixturePost2.created_at,
 }

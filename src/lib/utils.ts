@@ -15,12 +15,6 @@ export function formatDate(value: string | Date): string {
   })
 }
 
-export function formatDistance(km: number | null | undefined): string {
-  if (km == null || Number.isNaN(km)) return '—'
-  if (km < 1) return `${Math.round(km * 1000)} m`
-  return `${km.toFixed(1)} km`
-}
-
 export function truncate(text: string, max = 90): string {
   if (!text) return ''
   return text.length > max ? `${text.slice(0, max).trimEnd()}…` : text

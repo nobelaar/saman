@@ -19,8 +19,6 @@ export function NuevoCentroPage({ user }: Props) {
       direccion: values.direccion,
       ciudad: values.ciudad,
       contacto: values.contacto,
-      lat: values.lat,
-      lng: values.lng,
       foto_portada: values.foto_portada,
     })
     navigate(`/centro/${created.id}`)
@@ -30,7 +28,7 @@ export function NuevoCentroPage({ user }: Props) {
     <div className="mx-auto max-w-md space-y-3 py-4">
       <h1 className="text-xl font-bold">Registrar centro de acopio</h1>
       <p className="text-sm text-muted-foreground">
-        Tu dirección se geocodifica automáticamente. Si falla, podés ingresar las coordenadas manualmente.
+        Registrá la dirección y el contacto del centro.
       </p>
       <CentroForm
         initial={{}}

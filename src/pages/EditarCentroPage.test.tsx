@@ -2,16 +2,11 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { MemoryRouter, Routes, Route, useLocation } from 'react-router-dom'
-import { describe, expect, it, vi, beforeEach } from 'vitest'
+import { describe, expect, it, beforeEach } from 'vitest'
 import { supabase } from '@/lib/supabase'
 import { createTestQueryClient } from '@/test/test-utils'
 import { fixtureCentro, fixtureUser } from '@/test/mocks'
 import { EditarCentroPage } from './EditarCentroPage'
-
-vi.mock('@/lib/geo', () => ({
-  geocodeAddress: vi.fn(async () => ({ lat: '10.488', lon: '-66.866', display_name: 'x' })),
-  googleMapsDirectionsUrl: vi.fn(() => 'mockmaps'),
-}))
 
 function renderEdit(id = fixtureCentro.id) {
   const Probe = () => {
@@ -74,5 +69,3 @@ describe('EditarCentroPage', () => {
     )
   })
 })
-
-void fixtureUser
