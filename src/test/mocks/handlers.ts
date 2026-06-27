@@ -1,10 +1,11 @@
 import { http, HttpResponse } from 'msw'
-import type { CentroAcopio, Post } from '@/types/db'
+import type { CentroAcopio, Post, PostUtil } from '@/types/db'
 import {
   fixtureCentro,
   fixtureCentro2,
   fixturePost,
   fixturePost2,
+  fixturePostUtil,
   fixtureSession,
 } from './fixtures'
 
@@ -13,6 +14,7 @@ const BASE = (import.meta.env.VITE_SUPABASE_URL as string) || 'https://acopio-te
 interface Store {
   centros: CentroAcopio[]
   posts: Post[]
+  postUtils: PostUtil[]
 }
 
 let store: Store = makeStore()
@@ -31,6 +33,7 @@ function makeStore(): Store {
   return {
     centros: [structuredClone(fixtureCentro), structuredClone(fixtureCentro2)],
     posts: [structuredClone(fixturePost), structuredClone(fixturePost2)],
+    postUtils: [structuredClone(fixturePostUtil)],
   }
 }
 
@@ -152,6 +155,34 @@ const restHandlers = [
     }
     store.posts.push(created)
     return HttpResponse.json(isObjectAccept(request) ? created : [created])
+  }),
+
+  http.get(`${BASE}/rest/v1/post_util`, ({ request }) => {
+    const url = new URL(request.url)
+    const { filters } = parseQuery(url)
+    let rows = applyFilters(store.postUtils as unknown as Record<string, unknown>[], filters)
+    return HttpResponse.json(rows)
+  }),
+
+  http.post(`${BASE}/rest/v1/post_util`, async ({ request }) => {
+    const body = (await request.json()) as Partial<PostUtil>
+    const created: PostUtil = {
+      id: crypto.randomUUID(),
+      post_id: body.post_id ?? '',
+      user_id: body.user_id ?? '',
+      created_at: new Date().toISOString(),
+    }
+    store.postUtils.push(created)
+    return HttpResponse.json(created)
+  }),
+
+  http.delete(`${BASE}/rest/v1/post_util`, ({ request }) => {
+    const url = new URL(request.url)
+    const { filters } = parseQuery(url)
+    store.postUtils = store.postUtils.filter(
+      (pu) => !(filters.post_id && pu.post_id === filters.post_id)
+    )
+    return HttpResponse.json(null, { status: 204 })
   }),
 ]
 

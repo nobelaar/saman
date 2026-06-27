@@ -25,11 +25,13 @@ export function NuevoCentroPage({ user }: Props) {
   }
 
   return (
-    <div className="mx-auto max-w-md space-y-3 py-4">
-      <h1 className="text-xl font-bold">Registrar centro de acopio</h1>
-      <p className="text-sm text-muted-foreground">
-        Registrá la dirección y el contacto del centro.
-      </p>
+    <div className="mx-auto max-w-[400px] space-y-6 px-6 py-8">
+      <div className="space-y-1">
+        <h1 className="text-2xl font-bold">Registrar centro de acopio</h1>
+        <p className="text-[15px] text-muted-foreground">
+          Registra la direccion y el contacto del centro.
+        </p>
+      </div>
       <CentroForm
         initial={{}}
         onSubmit={handleSubmit}

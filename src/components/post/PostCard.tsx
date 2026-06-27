@@ -1,37 +1,101 @@
-import type { Post } from '@/types/db'
+import { memo } from 'react'
+import { Link } from 'react-router-dom'
+import type { PostWithUtil } from '@/types/db'
 import { formatDate } from '@/lib/utils'
+import { Heart, Share } from 'lucide-react'
+import { useToggleUtil } from '@/features/posts/mutations'
 
 interface Props {
-  post: Post
+  post: PostWithUtil
+  centroNombre?: string
+  centroCiudad?: string
+  showCentro?: boolean
 }
 
-export function PostCard({ post }: Props) {
+export const PostCard = memo(function PostCard({ post, centroNombre, centroCiudad, showCentro = false }: Props) {
+  const toggleUtil = useToggleUtil()
+
+  function handleUtil() {
+    toggleUtil.mutate({ postId: post.id, active: post.user_has_util })
+  }
+
+  function handleShare() {
+    const url = `${window.location.origin}/centro/${post.centro_id}`
+    if (navigator.share) {
+      navigator.share({ title: 'Publicacion de Acopio', url }).catch(() => {})
+    } else {
+      navigator.clipboard.writeText(url).catch(() => {})
+    }
+  }
+
   return (
-    <article className="rounded-lg border bg-card p-4 shadow-sm">
-      <div className="flex items-center justify-between text-xs text-muted-foreground">
+    <article className="border-b border-border px-4 py-3 transition-colors hover:bg-secondary/30 active:bg-secondary/50">
+      {showCentro && centroNombre && (
+        <Link
+          to={`/centro/${post.centro_id}`}
+          className="mb-1 flex items-center gap-2"
+        >
+          <span className="text-[15px] font-bold leading-tight tracking-[-0.3px] text-primary hover:underline">
+            {centroNombre}
+          </span>
+          {centroCiudad && (
+            <span className="text-[13px] text-muted-foreground">@{centroCiudad}</span>
+          )}
+        </Link>
+      )}
+
+      <div className="flex items-center justify-between text-[13px] text-muted-foreground">
         <time dateTime={post.created_at}>{formatDate(post.created_at)}</time>
       </div>
+
       {post.foto_url && (
         <img
           src={post.foto_url}
           alt="Foto del post"
           loading="lazy"
-          className="mt-2 h-64 w-full rounded-md object-cover"
+          decoding="async"
+          className="mt-2 w-full rounded-2xl border border-border object-cover"
         />
       )}
-      {post.contenido && <p className="mt-2 whitespace-pre-line text-sm">{post.contenido}</p>}
+
+      {post.contenido && (
+        <p className="mt-1 whitespace-pre-line text-[15px] leading-relaxed">{post.contenido}</p>
+      )}
+
       {post.necesidades.length > 0 && (
-        <div className="mt-3 flex flex-wrap gap-1.5">
+        <div className="mt-2 flex flex-wrap gap-1.5">
           {post.necesidades.map((n) => (
             <span
               key={n}
-              className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary"
+              className="rounded-full bg-primary/15 px-2.5 py-1 text-xs font-medium text-primary"
             >
               {n}
             </span>
           ))}
         </div>
       )}
+
+      <div className="mt-2 flex items-center gap-6">
+        <button
+          type="button"
+          onClick={handleUtil}
+          disabled={toggleUtil.isPending}
+          className="group flex items-center gap-1 text-[13px] text-muted-foreground transition-colors hover:text-primary disabled:opacity-50"
+        >
+          <Heart
+            size={18}
+            className={post.user_has_util ? 'fill-primary text-primary' : ''}
+          />
+          <span>{post.util_count}</span>
+        </button>
+        <button
+          type="button"
+          onClick={handleShare}
+          className="flex items-center gap-1 text-[13px] text-muted-foreground transition-colors hover:text-primary"
+        >
+          <Share size={18} />
+        </button>
+      </div>
     </article>
   )
-}
+})

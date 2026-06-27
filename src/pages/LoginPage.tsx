@@ -43,18 +43,18 @@ export function LoginPage() {
 
   if (estado === 'sin-confirmar') {
     return (
-      <div className="mx-auto max-w-sm space-y-4 py-8">
-        <h1 className="text-xl font-bold">Confirmá tu correo</h1>
-        <p className="text-sm text-muted-foreground">
-          Tu cuenta aún no está activada. Revisá tu correo
-          {email ? <><strong> {email}</strong> </> : null}
-          y hacé clic en el enlace de confirmación para activarla.
+      <div className="mx-auto max-w-[400px] space-y-6 px-6 py-16">
+        <h1 className="text-xl font-bold">Confirma tu correo</h1>
+        <p className="text-[15px] leading-relaxed text-muted-foreground">
+          Tu cuenta aun no esta activada. Revisa tu correo
+          {email ? <><strong className="text-foreground"> {email}</strong> </> : null}
+          y hace clic en el enlace de confirmacion para activarla.
         </p>
         {resendMsg && <p className="text-sm text-primary">{resendMsg}</p>}
-        <Button type="button" variant="outline" onClick={handleResend} disabled={resending}>
-          {resending ? 'Enviando…' : 'Reenviar correo de confirmación'}
+        <Button type="button" variant="outline" onClick={handleResend} disabled={resending} className="w-full h-[52px] rounded-xl">
+          {resending ? 'Enviando...' : 'Reenviar correo de confirmacion'}
         </Button>
-        <div className="flex items-center justify-between pt-2 text-sm">
+        <div className="flex items-center justify-between text-[13px]">
           <button
             type="button"
             onClick={() => setEstado('form')}
@@ -71,37 +71,42 @@ export function LoginPage() {
   }
 
   return (
-    <div className="mx-auto max-w-sm space-y-4 py-8">
-      <h1 className="text-xl font-bold">Iniciar sesión</h1>
-      <form onSubmit={handleSubmit} className="space-y-3">
+    <div className="mx-auto max-w-[400px] space-y-6 px-6 py-16">
+      <div className="space-y-2">
+        <h1 className="text-2xl font-bold">Iniciar sesion</h1>
+        <p className="text-[15px] text-muted-foreground">Continua para publicar</p>
+      </div>
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email" className="text-[13px]">Email</Label>
           <Input
             id="email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="email"
+            className="h-[52px] rounded-xl"
           />
         </div>
         <div>
-          <Label htmlFor="password">Contraseña</Label>
+          <Label htmlFor="password" className="text-[13px]">Contrasena</Label>
           <Input
             id="password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             autoComplete="current-password"
+            className="h-[52px] rounded-xl"
           />
         </div>
         {error && <p className="text-sm text-destructive">{error}</p>}
-        <Button type="submit" disabled={submitting} className="w-full">
-          {submitting ? 'Entrando…' : 'Iniciar sesión'}
+        <Button type="submit" disabled={submitting} className="w-full h-[52px] rounded-xl">
+          {submitting ? 'Entrando...' : 'Iniciar sesion'}
         </Button>
       </form>
-      <p className="text-center text-sm text-muted-foreground">
-        ¿No tenés cuenta?{' '}
-        <Link to="/registro" className="font-medium text-primary underline">
+      <p className="text-center text-[13px] text-muted-foreground">
+        No tenes cuenta?{' '}
+        <Link to="/registro" className="font-medium text-primary hover:underline">
           Crear cuenta
         </Link>
       </p>

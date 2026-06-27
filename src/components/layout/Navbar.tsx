@@ -1,37 +1,39 @@
-import { Link } from 'react-router-dom'
-import type { AuthUser } from '@/types/db'
-import { Button } from '@/components/ui/button'
+import { Link, useLocation } from 'react-router-dom'
+import { ArrowLeft } from 'lucide-react'
 
-interface Props {
-  user?: AuthUser | null
-  onLogout?: () => void
-}
+interface Props {}
 
-export function Navbar({ user, onLogout }: Props) {
+export function Navbar(_props: Props) {
+  const location = useLocation()
+  const isSubPage = location.pathname !== '/' && location.pathname !== '/centros'
+
   return (
-    <header className="sticky top-0 z-10 border-b bg-background/95 backdrop-blur">
-      <nav className="container flex h-14 items-center justify-between gap-2">
-        <Link to="/" className="text-base font-bold tracking-tight">
-          Acopio
-        </Link>
-        <div className="flex items-center gap-2 text-sm">
-          {user ? (
-            <>
-              <span className="hidden text-muted-foreground sm:inline">{user.email}</span>
-              <Button variant="ghost" size="sm" onClick={onLogout}>
-                Cerrar sesión
-              </Button>
-            </>
-          ) : (
-            <Link
-              to="/login"
-              className="inline-flex h-9 items-center rounded-md px-3 text-sm font-medium hover:bg-accent"
-            >
-              Iniciar sesión
+    <header className="sticky top-0 z-10 border-b border-border bg-black/95 backdrop-blur lg:hidden">
+      <nav className="flex h-11 items-center px-4">
+        {isSubPage ? (
+          <div className="flex items-center gap-3">
+            <Link to="/" className="text-muted-foreground hover:text-foreground" aria-label="Volver">
+              <ArrowLeft size={20} />
             </Link>
-          )}
-        </div>
+            <span className="text-[17px] font-bold">
+              {getPageTitle(location.pathname)}
+            </span>
+          </div>
+        ) : (
+          <Link to="/" className="text-[17px] font-bold tracking-tight text-primary">
+            Acopio
+          </Link>
+        )}
       </nav>
     </header>
   )
+}
+
+function getPageTitle(pathname: string): string {
+  if (pathname.startsWith('/centros/nuevo')) return 'Nuevo centro'
+  if (pathname.includes('/editar')) return 'Editar centro'
+  if (pathname.startsWith('/centro/')) return 'Centro'
+  if (pathname === '/login') return 'Iniciar sesion'
+  if (pathname === '/registro') return 'Crear cuenta'
+  return 'Acopio'
 }

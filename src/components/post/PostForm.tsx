@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Label, Textarea } from '@/components/ui/input'
 import { FotoUploader } from '@/components/common/FotoUploader'
 import { NecesidadesSelector } from '@/components/common/NecesidadesSelector'
+import { Image } from 'lucide-react'
 
 export interface PostFormValues {
   centro_id: string
@@ -22,11 +22,12 @@ export function PostForm({ centroId, onSubmit, submitting = false }: Props) {
   const [foto, setFoto] = useState<string | null>(null)
   const [necesidades, setNecesidades] = useState<string[]>([])
   const [error, setError] = useState<string | null>(null)
+  const [showExtras, setShowExtras] = useState(false)
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!contenido.trim()) {
-      setError('Escribí algo para publicar')
+      setError('Escribi algo para publicar')
       return
     }
     setError(null)
@@ -39,33 +40,51 @@ export function PostForm({ centroId, onSubmit, submitting = false }: Props) {
     setContenido('')
     setFoto(null)
     setNecesidades([])
+    setShowExtras(false)
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3 rounded-lg border bg-card p-4 shadow-sm">
-      <div>
-        <Label htmlFor="contenido">Contenido</Label>
-        <Textarea
-          id="contenido"
-          value={contenido}
-          onChange={(e) => setContenido(e.target.value)}
-          rows={3}
-          maxLength={2000}
-          placeholder="¿Qué necesita el centro ahora?"
-        />
-        {error && <p className="text-sm text-destructive">{error}</p>}
+    <form onSubmit={handleSubmit} className="px-4 py-3">
+      <textarea
+        value={contenido}
+        onChange={(e) => setContenido(e.target.value)}
+        rows={3}
+        placeholder="Que necesita este centro?"
+        className="w-full resize-none bg-transparent text-[15px] leading-relaxed text-foreground placeholder:text-muted-foreground focus:outline-none"
+      />
+
+      {error && <p className="mb-2 text-sm text-destructive">{error}</p>}
+
+      {showExtras && (
+        <div className="space-y-3 border-t border-border pt-3">
+          <div>
+            <FotoUploader
+              value={foto}
+              onChange={setFoto}
+              storagePrefix={centroId}
+            />
+          </div>
+          <NecesidadesSelector value={necesidades} onChange={setNecesidades} />
+        </div>
+      )}
+
+      <div className="flex items-center justify-between pt-2">
+        <button
+          type="button"
+          onClick={() => setShowExtras(!showExtras)}
+          className="rounded-full p-2 text-primary hover:bg-primary/10"
+        >
+          <Image size={20} />
+        </button>
+        <Button
+          type="submit"
+          disabled={submitting || !contenido.trim()}
+          size="sm"
+          className="rounded-full px-5"
+        >
+          {submitting ? 'Publicando...' : 'Publicar'}
+        </Button>
       </div>
-      <div>
-        <Label>Foto (opcional)</Label>
-        <FotoUploader value={foto} onChange={setFoto} storagePrefix={`posts/${centroId}`} />
-      </div>
-      <div>
-        <Label>Necesidades</Label>
-        <NecesidadesSelector value={necesidades} onChange={setNecesidades} />
-      </div>
-      <Button type="submit" disabled={submitting} className="w-full">
-        {submitting ? 'Publicando…' : 'Publicar'}
-      </Button>
     </form>
   )
 }

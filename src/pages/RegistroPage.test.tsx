@@ -35,23 +35,23 @@ describe('RegistroPage', () => {
     const user = userEvent.setup()
     renderRegistroPage()
     await user.type(screen.getByLabelText(/email|correo/i), 'nuevo@example.com')
-    await user.type(screen.getByLabelText(/contraseña|password/i), 'password123')
-    await user.click(screen.getByRole('button', { name: /registr|crear cuenta/i }))
+    await user.type(screen.getByLabelText(/contrasena|password/i), 'password123')
+    await user.click(screen.getByRole('button', { name: /crear cuenta/i }))
     await waitFor(() => expect(screen.getByTestId('loc')).toHaveTextContent('/'))
   })
 
   it('shows an error when the signup fails', async () => {
     const user = userEvent.setup()
     renderRegistroPage()
-    await user.click(screen.getByRole('button', { name: /registr|crear cuenta/i }))
+    await user.click(screen.getByRole('button', { name: /crear cuenta/i }))
     await waitFor(() =>
-      expect(screen.getByText(/inválid|credenciales|error|no se pudo/i)).toBeInTheDocument()
+      expect(screen.getByText(/invalid|credenciales|error|no se pudo/i)).toBeInTheDocument()
     )
   })
 
   it('has a link back to the login page', () => {
     renderRegistroPage()
-    expect(screen.getByRole('link', { name: /iniciar sesión|entrar/i })).toHaveAttribute('href', '/login')
+    expect(screen.getByRole('link', { name: /iniciar sesion|entrar/i })).toHaveAttribute('href', '/login')
   })
 
   it('shows a confirmation screen when the project requires email confirmation', async () => {
@@ -59,14 +59,14 @@ describe('RegistroPage', () => {
     const user = userEvent.setup()
     renderRegistroPage()
     await user.type(screen.getByLabelText(/email|correo/i), 'nuevo2@example.com')
-    await user.type(screen.getByLabelText(/contraseña|password/i), 'password123')
-    await user.click(screen.getByRole('button', { name: /registr|crear cuenta/i }))
+    await user.type(screen.getByLabelText(/contrasena|password/i), 'password123')
+    await user.click(screen.getByRole('button', { name: /crear cuenta/i }))
     await waitFor(() =>
-      expect(screen.getByText(/hemos enviado|correo de confirmación/i)).toBeInTheDocument()
+      expect(screen.getByText(/hemos enviado/i)).toBeInTheDocument()
     )
     expect(screen.getByText('nuevo2@example.com')).toBeInTheDocument()
     await waitFor(() =>
-      expect(screen.getByRole('link', { name: /iniciar sesión|entrar/i })).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: /iniciar sesion|entrar/i })).toBeInTheDocument()
     )
     expect(screen.queryByLabelText(/email|correo/i)).not.toBeInTheDocument()
   })
@@ -76,11 +76,11 @@ describe('RegistroPage', () => {
     const user = userEvent.setup()
     renderRegistroPage()
     await user.type(screen.getByLabelText(/email|correo/i), 'nuevo3@example.com')
-    await user.type(screen.getByLabelText(/contraseña|password/i), 'password123')
-    await user.click(screen.getByRole('button', { name: /registr|crear cuenta/i }))
+    await user.type(screen.getByLabelText(/contrasena|password/i), 'password123')
+    await user.click(screen.getByRole('button', { name: /crear cuenta/i }))
     const resend = await screen.findByRole('button', { name: /reenviar/i })
     await user.click(resend)
-    await waitFor(() => expect(screen.getByText(/reenviado|enviamos otro|ya te lo enviamos de nuevo/i)).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByText(/enviamos/i)).toBeInTheDocument())
   })
 
   it('lets the user go back to the form (edit) from the confirmation screen', async () => {
@@ -88,9 +88,9 @@ describe('RegistroPage', () => {
     const user = userEvent.setup()
     renderRegistroPage()
     await user.type(screen.getByLabelText(/email|correo/i), 'nuevo4@example.com')
-    await user.type(screen.getByLabelText(/contraseña|password/i), 'password123')
-    await user.click(screen.getByRole('button', { name: /registr|crear cuenta/i }))
-    const back = await screen.findByRole('button', { name: /regresar|modificar|volver/i })
+    await user.type(screen.getByLabelText(/contrasena|password/i), 'password123')
+    await user.click(screen.getByRole('button', { name: /crear cuenta/i }))
+    const back = await screen.findByRole('button', { name: /modificar|volver/i })
     await user.click(back)
     await waitFor(() => expect(screen.getByLabelText(/email|correo/i)).toBeInTheDocument())
   })

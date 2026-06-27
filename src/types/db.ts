@@ -44,3 +44,15 @@ export interface AuthSession {
   user: AuthUser
   access_token: string
 }
+
+export interface PostUtil {
+  id: string
+  post_id: string
+  user_id: string
+  created_at: string
+}
+
+export interface PostWithUtil extends Post {
+  util_count: number
+  user_has_util: boolean
+}

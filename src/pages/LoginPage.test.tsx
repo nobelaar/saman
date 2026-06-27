@@ -35,8 +35,8 @@ describe('LoginPage', () => {
     const user = userEvent.setup()
     renderLoginPage()
     await user.type(screen.getByLabelText(/email|correo/i), 'coordinador@example.com')
-    await user.type(screen.getByLabelText(/contraseña|password/i), 'password123')
-    await user.click(screen.getByRole('button', { name: /iniciar sesión|entrar/i }))
+    await user.type(screen.getByLabelText(/contrasena|password/i), 'password123')
+    await user.click(screen.getByRole('button', { name: /iniciar sesion|entrar/i }))
     await waitFor(() => expect(screen.getByTestId('loc')).toHaveTextContent('/'))
     expect(screen.queryByText(/inválid|error/i)).not.toBeInTheDocument()
   })
@@ -44,15 +44,15 @@ describe('LoginPage', () => {
   it('shows an error message when credentials are invalid', async () => {
     const user = userEvent.setup()
     renderLoginPage()
-    await user.click(screen.getByRole('button', { name: /iniciar sesión|entrar/i }))
+    await user.click(screen.getByRole('button', { name: /iniciar sesion|entrar/i }))
     await waitFor(() =>
-      expect(screen.getByText(/inválid|credenciales|error/i)).toBeInTheDocument()
+      expect(screen.getByText(/invalid|credenciales|error/i)).toBeInTheDocument()
     )
   })
 
   it('has a link to the registration page', () => {
     renderLoginPage()
-    const link = screen.getByRole('link', { name: /registr|crear cuenta/i })
+    const link = screen.getByRole('link', { name: /crear cuenta/i })
     expect(link).toHaveAttribute('href', '/registro')
   })
 
@@ -61,10 +61,10 @@ describe('LoginPage', () => {
     const user = userEvent.setup()
     renderLoginPage()
     await user.type(screen.getByLabelText(/email|correo/i), 'sinconfirmar@example.com')
-    await user.type(screen.getByLabelText(/contraseña|password/i), 'password123')
-    await user.click(screen.getByRole('button', { name: /iniciar sesión|entrar/i }))
+    await user.type(screen.getByLabelText(/contrasena|password/i), 'password123')
+    await user.click(screen.getByRole('button', { name: /iniciar sesion|entrar/i }))
     await waitFor(() =>
-      expect(screen.getByRole('heading', { name: /confirmá tu correo|confirmar tu email/i })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: /confirma tu correo/i })).toBeInTheDocument()
     )
     expect(screen.getByText('sinconfirmar@example.com')).toBeInTheDocument()
     const resend = screen.getByRole('button', { name: /reenviar/i })

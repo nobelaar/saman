@@ -5,7 +5,7 @@ import { MemoryRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { describe, expect, it, beforeEach } from 'vitest'
 import { supabase } from '@/lib/supabase'
 import { createTestQueryClient } from '@/test/test-utils'
-import { fixtureCentro, fixtureUser } from '@/test/mocks'
+import { fixtureCentro } from '@/test/mocks'
 import { EditarCentroPage } from './EditarCentroPage'
 
 function renderEdit(id = fixtureCentro.id) {

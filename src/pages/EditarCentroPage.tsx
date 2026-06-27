@@ -34,8 +34,8 @@ export function EditarCentroPage({ user }: Props) {
   }
 
   return (
-    <div className="mx-auto max-w-md space-y-3 py-4">
-      <h1 className="text-xl font-bold">Editar centro</h1>
+    <div className="mx-auto max-w-[400px] space-y-4 px-6 py-8">
+      <h1 className="text-2xl font-bold">Editar centro</h1>
       <CentroForm
         key={centro.id}
         initial={centro}

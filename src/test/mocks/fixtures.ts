@@ -1,4 +1,4 @@
-import type { CentroAcopio, Post, CentroResumen } from '@/types/db'
+import type { CentroAcopio, Post, CentroResumen, PostUtil } from '@/types/db'
 
 export const fixtureCentro: CentroAcopio = {
   id: '00000000-0000-0000-0000-000000000001',
@@ -65,4 +65,11 @@ export const fixtureSession = {
   token_type: 'bearer',
   expires_in: 3600,
   user: fixtureUser,
+}
+
+export const fixturePostUtil: PostUtil = {
+  id: 'uuuuuuuu-0000-0000-0000-000000000001',
+  post_id: fixturePost.id,
+  user_id: fixtureUser.id,
+  created_at: '2025-01-12T12:00:00.000Z',
 }

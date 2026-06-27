@@ -43,21 +43,21 @@ export function RegistroPage() {
 
   if (estado === 'confirmacion') {
     return (
-      <div className="mx-auto max-w-sm space-y-4 py-8">
-        <h1 className="text-xl font-bold">Revisá tu correo</h1>
-        <p className="text-sm text-muted-foreground">
-          Hemos enviado un correo de confirmación a <strong>{email}</strong>. Hacé
+      <div className="mx-auto max-w-[400px] space-y-6 px-6 py-16">
+        <h1 className="text-xl font-bold">Revisa tu correo</h1>
+        <p className="text-[15px] leading-relaxed text-muted-foreground">
+          Hemos enviado un correo de confirmacion a <strong className="text-foreground">{email}</strong>. Hace
           clic en el enlace del correo para activar tu cuenta y poder registrar tu
           centro de acopio.
         </p>
-        <p className="text-sm text-muted-foreground">
-          Si no lo recibiste en unos minutos, revisá la carpeta de spam.
+        <p className="text-[13px] text-muted-foreground">
+          Si no lo recibiste en unos minutos, revisa la carpeta de spam.
         </p>
         {resendMsg && <p className="text-sm text-primary">{resendMsg}</p>}
-        <Button type="button" variant="outline" onClick={handleResend} disabled={resending}>
-          {resending ? 'Enviando…' : 'Reenviar correo'}
+        <Button type="button" variant="outline" onClick={handleResend} disabled={resending} className="w-full h-[52px] rounded-xl">
+          {resending ? 'Enviando...' : 'Reenviar correo'}
         </Button>
-        <div className="flex items-center justify-between pt-2 text-sm">
+        <div className="flex items-center justify-between text-[13px]">
           <button
             type="button"
             onClick={() => setEstado('form')}
@@ -66,7 +66,7 @@ export function RegistroPage() {
             Modificar mis datos
           </button>
           <Link to="/login" className="font-medium text-primary underline">
-            Iniciar sesión
+            Iniciar sesion
           </Link>
         </div>
       </div>
@@ -74,38 +74,43 @@ export function RegistroPage() {
   }
 
   return (
-    <div className="mx-auto max-w-sm space-y-4 py-8">
-      <h1 className="text-xl font-bold">Crear cuenta</h1>
-      <form onSubmit={handleSubmit} className="space-y-3">
+    <div className="mx-auto max-w-[400px] space-y-6 px-6 py-16">
+      <div className="space-y-2">
+        <h1 className="text-2xl font-bold">Crear cuenta</h1>
+        <p className="text-[15px] text-muted-foreground">Registrate para crear centros de acopio</p>
+      </div>
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email" className="text-[13px]">Email</Label>
           <Input
             id="email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="email"
+            className="h-[52px] rounded-xl"
           />
         </div>
         <div>
-          <Label htmlFor="password">Contraseña</Label>
+          <Label htmlFor="password" className="text-[13px]">Contrasena</Label>
           <Input
             id="password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             autoComplete="new-password"
+            className="h-[52px] rounded-xl"
           />
         </div>
         {error && <p className="text-sm text-destructive">{error}</p>}
-        <Button type="submit" disabled={submitting} className="w-full">
-          {submitting ? 'Creando…' : 'Crear cuenta'}
+        <Button type="submit" disabled={submitting} className="w-full h-[52px] rounded-xl">
+          {submitting ? 'Creando...' : 'Crear cuenta'}
         </Button>
       </form>
-      <p className="text-center text-sm text-muted-foreground">
-        ¿Ya tenés cuenta?{' '}
-        <Link to="/login" className="font-medium text-primary underline">
-          Iniciar sesión
+      <p className="text-center text-[13px] text-muted-foreground">
+        Ya tenes cuenta?{' '}
+        <Link to="/login" className="font-medium text-primary hover:underline">
+          Iniciar sesion
         </Link>
       </p>
     </div>

@@ -32,7 +32,7 @@ describe('CentroPerfilPage', () => {
     await waitFor(() => {
       expect(screen.getByText(fixtureCentro.nombre)).toBeInTheDocument()
     })
-    expect(screen.getByText(new RegExp(fixtureCentro.ciudad))).toBeInTheDocument()
+    expect(screen.getAllByText(new RegExp(fixtureCentro.ciudad)).length).toBeGreaterThan(0)
     expect(screen.getByText(new RegExp(fixtureCentro.direccion))).toBeInTheDocument()
   })
 
@@ -46,7 +46,7 @@ describe('CentroPerfilPage', () => {
   it('shows a not-found message for nonexistent centro', async () => {
     renderPerfil('ffffffff-ffff-ffff-ffff-ffffffffffff')
     await waitFor(() => {
-      expect(screen.getByText(/no se encontró/i)).toBeInTheDocument()
+      expect(screen.getByText(/no se encontro/i)).toBeInTheDocument()
     })
   })
 

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
-import type { Post } from '@/types/db'
+import type { Post, PostWithUtil } from '@/types/db'
 
 export interface CrearPostInput {
   centro_id: string
@@ -28,6 +28,59 @@ export function useCrearPost() {
     },
     onSuccess: (_data, variables) => {
       qc.invalidateQueries({ queryKey: ['posts', variables.centro_id] })
+      qc.invalidateQueries({ queryKey: ['posts', 'feed'] })
+    },
+  })
+}
+
+export interface ToggleUtilInput {
+  postId: string
+  active: boolean
+}
+
+export function useToggleUtil() {
+  const qc = useQueryClient()
+  return useMutation<void, Error, ToggleUtilInput>({
+    mutationFn: async ({ postId, active }) => {
+      if (active) {
+        const { error } = await supabase
+          .from('post_util')
+          .delete()
+          .eq('post_id', postId)
+          .eq('user_id', (await supabase.auth.getUser()).data.user?.id ?? '')
+        if (error) throw error
+      } else {
+        const { error } = await supabase
+          .from('post_util')
+          .insert({ post_id: postId })
+        if (error) throw error
+      }
+    },
+    onMutate: async ({ postId, active }) => {
+      await qc.cancelQueries({ queryKey: ['posts', 'feed'] })
+      qc.setQueriesData<{ pages: PostWithUtil[][] }>(
+        { queryKey: ['posts', 'feed'] },
+        (old) => {
+          if (!old) return old
+          return {
+            ...old,
+            pages: old.pages.map((page) =>
+              page.map((p) =>
+                p.id === postId
+                  ? {
+                      ...p,
+                      user_has_util: !active,
+                      util_count: active ? Math.max(0, p.util_count - 1) : p.util_count + 1,
+                    }
+                  : p
+              )
+            ),
+          }
+        }
+      )
+    },
+    onError: () => {
+      qc.invalidateQueries({ queryKey: ['posts', 'feed'] })
     },
   })
 }

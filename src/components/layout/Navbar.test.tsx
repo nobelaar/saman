@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { MemoryRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { Navbar } from './Navbar'
 
@@ -20,38 +19,24 @@ function renderAt(path = '/') {
 }
 
 describe('Navbar', () => {
-  it('has a link to the home page labelled Acopio', () => {
-    renderAt('/login')
-    expect(screen.getByRole('link', { name: /acopio/i })).toHaveAttribute('href', '/')
-  })
-
-  it('shows a login link when not authenticated', () => {
+  it('shows Acopio brand on the home page', () => {
     renderAt('/')
-    expect(screen.getByRole('link', { name: /iniciar sesión|entrar|login/i })).toBeInTheDocument()
+    expect(screen.getByText(/acopio/i)).toBeInTheDocument()
   })
 
-  it('shows logout and the user email when authenticated', () => {
-    const onLogout = vi.fn()
-    render(
-      <MemoryRouter>
-        <Navbar user={{ id: 'u1', email: 'ana@example.com' }} onLogout={onLogout} />
-      </MemoryRouter>
-    )
-    expect(screen.getByText(/ana@example.com/i)).toBeInTheDocument()
-    expect(
-      screen.getByRole('button', { name: /cerrar sesión|salir/i })
-    ).toBeInTheDocument()
+  it('shows a back arrow and page title on sub-pages', () => {
+    renderAt('/login')
+    expect(screen.getByText('Iniciar sesion')).toBeInTheDocument()
+    expect(screen.getByLabelText('Volver')).toHaveAttribute('href', '/')
   })
 
-  it('calls onLogout when the logout button is clicked', async () => {
-    const user = userEvent.setup()
-    const onLogout = vi.fn()
-    render(
-      <MemoryRouter>
-        <Navbar user={{ id: 'u1', email: 'ana@example.com' }} onLogout={onLogout} />
-      </MemoryRouter>
-    )
-    await user.click(screen.getByRole('button', { name: /cerrar sesión|salir/i }))
-    expect(onLogout).toHaveBeenCalledTimes(1)
+  it('shows page title for centro routes', () => {
+    renderAt('/centro/uuid-123')
+    expect(screen.getByText('Centro')).toBeInTheDocument()
+  })
+
+  it('shows page title for nuevo centro route', () => {
+    renderAt('/centros/nuevo')
+    expect(screen.getByText('Nuevo centro')).toBeInTheDocument()
   })
 })

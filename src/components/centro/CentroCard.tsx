@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { Link } from 'react-router-dom'
 import type { CentroResumen } from '@/types/db'
 import { DEFAULT_FALLBACK_PHOTO } from '@/lib/constants'
@@ -7,11 +8,11 @@ interface Props {
   centro: CentroResumen
 }
 
-export function CentroCard({ centro }: Props) {
+export const CentroCard = memo(function CentroCard({ centro }: Props) {
   return (
     <Link
       to={`/centro/${centro.id}`}
-      className="block overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm transition-shadow hover:shadow-md"
+      className="block overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-sm transition-shadow hover:border-primary/30 hover:shadow-md active:scale-[0.98]"
     >
       <div className="aspect-square w-full overflow-hidden bg-muted">
         <img
@@ -32,4 +33,4 @@ export function CentroCard({ centro }: Props) {
       </div>
     </Link>
   )
-}
+})

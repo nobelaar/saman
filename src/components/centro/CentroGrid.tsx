@@ -24,7 +24,7 @@ export function CentroGrid({ centros, isLoading }: Props) {
   return (
     <div
       data-testid="centro-grid"
-      className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4"
+      className="grid grid-cols-2 gap-3 px-4 md:grid-cols-3 lg:grid-cols-4"
     >
       {centros.map((c) => (
         <CentroCard key={c.id} centro={c} />
