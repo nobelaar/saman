@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, HeartHandshake } from 'lucide-react'
 
 interface Props {}
 
@@ -20,8 +20,9 @@ export function Navbar(_props: Props) {
             </span>
           </div>
         ) : (
-          <Link to="/" className="text-[17px] font-bold tracking-tight text-primary">
-            Acopio
+          <Link to="/" className="flex items-center gap-2 text-primary">
+            <HeartHandshake size={22} strokeWidth={2.5} />
+            <span className="text-[17px] font-bold tracking-tight">Acopio</span>
           </Link>
         )}
       </nav>

@@ -1,5 +1,6 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useInfinitePostsFeed } from '@/features/posts/queries'
+import { useCentros } from '@/features/centros/queries'
 import { PostCard } from '@/components/post/PostCard'
 import { PostSkeletonList } from '@/components/post/PostSkeleton'
 import { useIntersectionObserver } from '@/lib/hooks/useIntersectionObserver'
@@ -17,6 +18,16 @@ export function FeedPage() {
     isError,
     refetch,
   } = useInfinitePostsFeed()
+
+  const { data: centros = [] } = useCentros()
+
+  const centroMap = useMemo(() => {
+    const map = new Map<string, { nombre: string; ciudad: string }>()
+    for (const c of centros) {
+      map.set(c.id, { nombre: c.nombre, ciudad: c.ciudad })
+    }
+    return map
+  }, [centros])
 
   const posts: PostWithUtil[] = data?.pages.flat() ?? []
 
@@ -64,14 +75,18 @@ export function FeedPage() {
 
   return (
     <div className="py-2">
-      {posts.map((post) => (
-        <PostCard
-          key={post.id}
-          post={post}
-          showCentro
-          centroNombre={post.centro_id}
-        />
-      ))}
+      {posts.map((post) => {
+        const centro = centroMap.get(post.centro_id)
+        return (
+          <PostCard
+            key={post.id}
+            post={post}
+            showCentro
+            centroNombre={centro?.nombre ?? 'Centro'}
+            centroCiudad={centro?.ciudad ?? ''}
+          />
+        )
+      })}
       <div ref={sentinelRef} className="py-4 text-center">
         {isFetchingNextPage ? (
           <span className="text-sm text-muted-foreground">Cargando mas...</span>

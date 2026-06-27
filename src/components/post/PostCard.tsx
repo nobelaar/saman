@@ -4,6 +4,7 @@ import type { PostWithUtil } from '@/types/db'
 import { formatDate } from '@/lib/utils'
 import { Heart, Share } from 'lucide-react'
 import { useToggleUtil } from '@/features/posts/mutations'
+import { addToast } from '@/lib/hooks/useToast'
 
 interface Props {
   post: PostWithUtil
@@ -16,7 +17,14 @@ export const PostCard = memo(function PostCard({ post, centroNombre, centroCiuda
   const toggleUtil = useToggleUtil()
 
   function handleUtil() {
-    toggleUtil.mutate({ postId: post.id, active: post.user_has_util })
+    toggleUtil.mutate(
+      { postId: post.id, active: post.user_has_util },
+      {
+        onError: (err) => {
+          addToast(err.message || 'No se pudo registrar', 'error')
+        },
+      }
+    )
   }
 
   function handleShare() {
