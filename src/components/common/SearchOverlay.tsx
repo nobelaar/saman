@@ -27,13 +27,15 @@ export function SearchOverlay({ open, onClose }: Props) {
       : centros.slice(0, 10)
 
   return (
-    <div className="fixed inset-0 z-30 flex flex-col bg-black animate-in slide-in-from-bottom duration-200">
-      <div className="flex items-center gap-3 border-b border-border px-4 py-2">
+    <div
+      className="fixed inset-x-0 top-0 z-30 flex flex-col bg-black animate-in slide-in-from-bottom duration-200"
+      style={{ height: '100dvh' }}
+    >
+      <div className="flex shrink-0 items-center gap-3 border-b border-border px-4 py-2">
         <button type="button" onClick={onClose} className="text-muted-foreground">
           <X size={20} />
         </button>
         <Input
-          autoFocus
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Buscar centros..."
@@ -41,7 +43,7 @@ export function SearchOverlay({ open, onClose }: Props) {
         />
       </div>
 
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 overflow-auto pb-4">
         {!query.trim() && (
           <div className="flex flex-wrap gap-2 px-4 py-3">
             {NECESIDADES_PREDEFINIDAS.slice(0, 6).map((n) => (
