@@ -1,11 +1,13 @@
 import { http, HttpResponse } from 'msw'
-import type { CentroAcopio, Post, PostUtil } from '@/types/db'
+import type { CentroAcopio, Post, PostUtil, PostComentario, ComentarioUtil } from '@/types/db'
 import {
   fixtureCentro,
   fixtureCentro2,
   fixturePost,
   fixturePost2,
   fixturePostUtil,
+  fixtureComentario,
+  fixtureComentarioUtil,
   fixtureSession,
 } from './fixtures'
 
@@ -15,6 +17,8 @@ interface Store {
   centros: CentroAcopio[]
   posts: Post[]
   postUtils: PostUtil[]
+  comentarios: PostComentario[]
+  comentarioUtils: ComentarioUtil[]
 }
 
 let store: Store = makeStore()
@@ -34,6 +38,8 @@ function makeStore(): Store {
     centros: [structuredClone(fixtureCentro), structuredClone(fixtureCentro2)],
     posts: [structuredClone(fixturePost), structuredClone(fixturePost2)],
     postUtils: [structuredClone(fixturePostUtil)],
+    comentarios: [structuredClone(fixtureComentario)],
+    comentarioUtils: [structuredClone(fixtureComentarioUtil)],
   }
 }
 
@@ -181,6 +187,55 @@ const restHandlers = [
     const { filters } = parseQuery(url)
     store.postUtils = store.postUtils.filter(
       (pu) => !(filters.post_id && pu.post_id === filters.post_id)
+    )
+    return HttpResponse.json(null, { status: 204 })
+  }),
+
+  http.get(`${BASE}/rest/v1/post_comentario`, ({ request }) => {
+    const url = new URL(request.url)
+    const { filters, order } = parseQuery(url)
+    let rows = applyFilters(store.comentarios as unknown as Record<string, unknown>[], filters)
+    if (order) rows = applyOrder(rows, order, (r) => String(r[order!.column as keyof PostComentario]))
+    return HttpResponse.json(rows)
+  }),
+
+  http.post(`${BASE}/rest/v1/post_comentario`, async ({ request }) => {
+    const body = (await request.json()) as Partial<PostComentario>
+    const created: PostComentario = {
+      id: crypto.randomUUID(),
+      post_id: body.post_id ?? '',
+      user_id: body.user_id ?? '',
+      contenido: body.contenido ?? '',
+      created_at: new Date().toISOString(),
+    }
+    store.comentarios.push(created)
+    return HttpResponse.json(created)
+  }),
+
+  http.get(`${BASE}/rest/v1/comentario_util`, ({ request }) => {
+    const url = new URL(request.url)
+    const { filters } = parseQuery(url)
+    let rows = applyFilters(store.comentarioUtils as unknown as Record<string, unknown>[], filters)
+    return HttpResponse.json(rows)
+  }),
+
+  http.post(`${BASE}/rest/v1/comentario_util`, async ({ request }) => {
+    const body = (await request.json()) as Partial<ComentarioUtil>
+    const created: ComentarioUtil = {
+      id: crypto.randomUUID(),
+      comentario_id: body.comentario_id ?? '',
+      user_id: body.user_id ?? '',
+      created_at: new Date().toISOString(),
+    }
+    store.comentarioUtils.push(created)
+    return HttpResponse.json(created)
+  }),
+
+  http.delete(`${BASE}/rest/v1/comentario_util`, ({ request }) => {
+    const url = new URL(request.url)
+    const { filters } = parseQuery(url)
+    store.comentarioUtils = store.comentarioUtils.filter(
+      (cu) => !(filters.comentario_id && cu.comentario_id === filters.comentario_id)
     )
     return HttpResponse.json(null, { status: 204 })
   }),

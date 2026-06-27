@@ -1,9 +1,13 @@
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import type { PostWithUtil } from '@/types/db'
 import { formatDate } from '@/lib/utils'
-import { Heart, Share } from 'lucide-react'
+import { Heart, Share, MessageCircle } from 'lucide-react'
 import { useToggleUtil } from '@/features/posts/mutations'
+import { useComentarios } from '@/features/posts/comentarios-queries'
+import { useSession } from '@/features/auth/session'
+import { ComentarioItem } from './ComentarioItem'
+import { ComentarioForm } from './ComentarioForm'
 import { addToast } from '@/lib/hooks/useToast'
 
 interface Props {
@@ -15,6 +19,10 @@ interface Props {
 
 export const PostCard = memo(function PostCard({ post, centroNombre, centroCiudad, showCentro = false }: Props) {
   const toggleUtil = useToggleUtil()
+  const { user } = useSession()
+  const [commentsOpen, setCommentsOpen] = useState(false)
+  const [showAllComments, setShowAllComments] = useState(false)
+  const { data: comentarios = [] } = useComentarios(post.id, commentsOpen)
 
   function handleUtil() {
     toggleUtil.mutate(
@@ -98,12 +106,45 @@ export const PostCard = memo(function PostCard({ post, centroNombre, centroCiuda
         </button>
         <button
           type="button"
+          onClick={() => setCommentsOpen(!commentsOpen)}
+          className="group flex items-center gap-1 text-[13px] text-muted-foreground transition-colors hover:text-primary"
+        >
+          <MessageCircle size={18} />
+          {comentarios.length > 0 && <span>{comentarios.length}</span>}
+        </button>
+        <button
+          type="button"
           onClick={handleShare}
           className="flex items-center gap-1 text-[13px] text-muted-foreground transition-colors hover:text-primary"
         >
           <Share size={18} />
         </button>
       </div>
+
+      {commentsOpen && (
+        <div className="mt-2 -mx-4 border-t border-border">
+          <ComentarioForm postId={post.id} user={user} />
+          {comentarios.length === 0 && (
+            <p className="px-4 py-3 text-[13px] text-muted-foreground">
+              Se el primero en comentar
+            </p>
+          )}
+          {comentarios
+            .slice(0, showAllComments ? undefined : 2)
+            .map((c) => (
+              <ComentarioItem key={c.id} comentario={c} postId={post.id} />
+            ))}
+          {!showAllComments && comentarios.length > 2 && (
+            <button
+              type="button"
+              onClick={() => setShowAllComments(true)}
+              className="w-full px-4 py-2 text-left text-[13px] text-primary hover:underline"
+            >
+              Ver los {comentarios.length} comentarios
+            </button>
+          )}
+        </div>
+      )}
     </article>
   )
 })

@@ -1,4 +1,4 @@
-import type { CentroAcopio, Post, CentroResumen, PostUtil } from '@/types/db'
+import type { CentroAcopio, Post, CentroResumen, PostUtil, PostComentario, ComentarioUtil } from '@/types/db'
 
 export const fixtureCentro: CentroAcopio = {
   id: '00000000-0000-0000-0000-000000000001',
@@ -72,4 +72,19 @@ export const fixturePostUtil: PostUtil = {
   post_id: fixturePost.id,
   user_id: fixtureUser.id,
   created_at: '2025-01-12T12:00:00.000Z',
+}
+
+export const fixtureComentario: PostComentario = {
+  id: 'cccccccc-0000-0000-0000-000000000001',
+  post_id: fixturePost.id,
+  user_id: fixtureUser.id,
+  contenido: 'Gracias por la info, voy a llevar agua manana.',
+  created_at: '2025-01-12T13:00:00.000Z',
+}
+
+export const fixtureComentarioUtil: ComentarioUtil = {
+  id: 'uuuuuuuu-0000-0000-0000-000000000002',
+  comentario_id: 'cccccccc-0000-0000-0000-000000000001',
+  user_id: fixtureUser.id,
+  created_at: '2025-01-12T13:05:00.000Z',
 }

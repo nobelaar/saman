@@ -52,6 +52,26 @@ export interface PostUtil {
   created_at: string
 }
 
+export interface ComentarioUtil {
+  id: string
+  comentario_id: string
+  user_id: string
+  created_at: string
+}
+
+export interface ComentarioWithUtil extends PostComentario {
+  util_count: number
+  user_has_util: boolean
+}
+
+export interface PostComentario {
+  id: string
+  post_id: string
+  user_id: string
+  contenido: string
+  created_at: string
+}
+
 export interface PostWithUtil extends Post {
   util_count: number
   user_has_util: boolean
