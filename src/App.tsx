@@ -10,6 +10,7 @@ import { HomePage } from '@/pages/HomePage'
 import { CentroPerfilPage } from '@/pages/CentroPerfilPage'
 import { LoginPage } from '@/pages/LoginPage'
 import { RegistroPage } from '@/pages/RegistroPage'
+import { PerfilPage } from '@/pages/PerfilPage'
 import { ComunidadPage } from '@/pages/ComunidadPage'
 import { NotificacionesPage } from '@/pages/NotificacionesPage'
 import { NuevoCentroPage } from '@/pages/NuevoCentroPage'
@@ -26,6 +27,7 @@ export default function App() {
       <main className="container flex-1 pb-14 lg:ml-[275px] lg:max-w-[600px] lg:pb-0">
         <Routes>
           <Route path="/" element={<FeedPage />} />
+          <Route path="/perfil" element={<PerfilPage />} />
           <Route path="/comunidad" element={<ComunidadPage />} />
           <Route path="/notificaciones" element={<NotificacionesPage />} />
           <Route path="/centros" element={<HomePage />} />

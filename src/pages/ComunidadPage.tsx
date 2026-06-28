@@ -36,7 +36,7 @@ export function ComunidadPage() {
     e.preventDefault()
     if (!contenido.trim()) return
     crearPost.mutate(
-      { contenido: contenido.trim(), necesidades: [] },
+      { contenido: contenido.trim(), necesidades: [], user_id: user?.id },
       { onSuccess: () => setContenido('') }
     )
   }

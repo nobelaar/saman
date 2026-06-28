@@ -85,3 +85,34 @@ export function useInfinitePostsComunidad() {
     gcTime: 5 * 60_000,
   })
 }
+
+export function useInfinitePostsPorUsuario(userId: string) {
+  return useInfiniteQuery<PostWithUtil[]>({
+    queryKey: ['posts', 'user', userId],
+    queryFn: async ({ pageParam }) => {
+      const cursor = pageParam as string | undefined
+      let query = supabase
+        .from('posts')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(PAGE_SIZE)
+
+      if (cursor) {
+        query = query.lt('created_at', cursor)
+      }
+
+      const { data, error } = await query
+      if (error) throw error
+      return (data ?? []).map(toPostWithUtil) as PostWithUtil[]
+    },
+    getNextPageParam: (lastPage) => {
+      if (lastPage.length < PAGE_SIZE) return undefined
+      return lastPage[lastPage.length - 1]?.created_at
+    },
+    initialPageParam: undefined as string | undefined,
+    enabled: !!userId,
+    staleTime: 30_000,
+    gcTime: 5 * 60_000,
+  })
+}

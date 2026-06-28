@@ -35,7 +35,7 @@ export function MobileBottomBar({ user }: Props) {
           label="Nuevo"
         />
         <Tab
-          to={user ? '#' : '/login'}
+          to={user ? '/perfil' : '/login'}
           icon={User}
           label={user ? 'Perfil' : 'Entrar'}
         />

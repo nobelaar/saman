@@ -26,7 +26,7 @@ export function DesktopSidebar({ user, onLogout }: Props) {
           label="Nuevo"
         />
         <SidebarItem
-          to={user ? '#' : '/login'}
+          to={user ? '/perfil' : '/login'}
           icon={User}
           label={user ? 'Perfil' : 'Entrar'}
         />

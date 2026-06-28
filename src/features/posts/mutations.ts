@@ -7,6 +7,7 @@ export interface CrearPostInput {
   contenido: string
   foto_url?: string | null
   necesidades?: string[]
+  user_id?: string
 }
 
 export function useCrearPost() {
@@ -20,6 +21,7 @@ export function useCrearPost() {
           contenido: input.contenido,
           foto_url: input.foto_url ?? null,
           necesidades: input.necesidades ?? [],
+          user_id: input.user_id ?? null,
         })
         .select()
         .single()
@@ -29,6 +31,9 @@ export function useCrearPost() {
     onSuccess: (_data, variables) => {
       if (variables.centro_id) {
         qc.invalidateQueries({ queryKey: ['posts', variables.centro_id] })
+      }
+      if (variables.user_id) {
+        qc.invalidateQueries({ queryKey: ['posts', 'user', variables.user_id] })
       }
       qc.invalidateQueries({ queryKey: ['posts', 'feed'] })
       qc.invalidateQueries({ queryKey: ['posts', 'comunidad'] })
