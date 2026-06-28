@@ -79,6 +79,7 @@ export const fixtureComentario: PostComentario = {
   post_id: fixturePost.id,
   user_id: fixtureUser.id,
   contenido: 'Gracias por la info, voy a llevar agua manana.',
+  autor_email: 'ana@example.com',
   created_at: '2025-01-12T13:00:00.000Z',
 }
 

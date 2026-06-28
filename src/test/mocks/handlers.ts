@@ -209,6 +209,7 @@ const restHandlers = [
       post_id: body.post_id ?? '',
       user_id: body.user_id ?? '',
       contenido: body.contenido ?? '',
+      autor_email: body.autor_email ?? '',
       created_at: new Date().toISOString(),
     }
     store.comentarios.push(created)

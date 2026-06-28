@@ -1,171 +1,253 @@
 -- =========================================================================
---  Acopio — Seed de datos de ejemplo
+--  Acopio — Seed SQL (ejecutar en SQL Editor DESPUÉS de crear los usuarios)
 -- =========================================================================
---  Cómo usar:
---  1. Conseguí tu user ID desde el dashboard de Supabase:
---     Authentication > Users > copiá el UUID de tu usuario
---  2. Reemplazá 'TU_USER_ID_AQUI' abajo con ese UUID
---  3. Ejecutá este script en el SQL Editor del dashboard de Supabase
+--  PASO 1: Creá los usuarios desde la terminal (copiá y pegalo):
+--
+--   npx supabase functions new noop
+--
+--  O mejor, crealos con curl. Reemplazá YOUR_SERVICE_ROLE_KEY:
+--
+--   for email in maria.lopez@gmail.com carlos.martinez@gmail.com diana.rodriguez@gmail.com jose.hernandez@gmail.com ana.gonzalez@gmail.com pedro.ramirez@gmail.com laura.cedeno@gmail.com; do
+--     curl -X POST 'https://kfijcwntyjdizvvenwmp.supabase.co/auth/v1/admin/users' \
+--       -H "apikey: TU_SERVICE_ROLE_KEY" \
+--       -H "Authorization: Bearer TU_SERVICE_ROLE_KEY" \
+--       -H "Content-Type: application/json" \
+--       -d "{\"email\":\"$email\",\"password\":\"seed123456\",\"email_confirm\":true}"
+--   done
+--
+--  PASO 2: Buscá los UUIDs generados en Authentication > Users y
+--          reemplazalos abajo. Después ejecutá este script.
 -- =========================================================================
 
 DO $$
 DECLARE
-  v_user_id      uuid := 'TU_USER_ID_AQUI';
-  v_centro_id    uuid;
-  v_ahora        timestamptz := now();
+  -- REEMPLAZÁ estos UUIDs con los IDs reales de los usuarios creados
+  u_maria    uuid := 'db70aba4-c470-4f7e-9c95-7d0d003a4073';
+  u_carlos   uuid := 'a93fbc05-43ed-4a7a-aaf7-cdc10e6fdb95';
+  u_diana    uuid := '54d7e258-f3e2-4996-8513-8ba7157c9b58';
+  u_jose     uuid := '11067aac-157b-4a34-96ba-0fa91ce51a81';
+  u_ana      uuid := 'f5642a47-4f1d-4005-84ce-2e15488c8ca9';
+  u_pedro    uuid := '07af58db-8a99-486d-9cb8-bd4fa9343199';
+  u_laura    uuid := '5ba3afd1-b410-4ae4-b647-175b84f7df63';
+
+  c_caracas  uuid := gen_random_uuid();
+  c_valencia uuid := gen_random_uuid();
+  c_maracaibo uuid := gen_random_uuid();
+
+  p_id uuid;
+  co_id uuid;
+
+  v_ahora timestamptz := now();
 BEGIN
 
-  -- -----------------------------------------------------------------------
-  -- 1. Crear el centro de acopio de ejemplo
-  -- -----------------------------------------------------------------------
-  v_centro_id := gen_random_uuid();
+  -- =======================================================================
+  -- Centros de acopio
+  -- =======================================================================
 
-  INSERT INTO public.centros_acopio (
-    id,
-    coordinador_id,
-    nombre,
-    descripcion,
-    direccion,
-    ciudad,
-    contacto,
-    foto_portada,
-    created_at
-  ) VALUES (
-    v_centro_id,
-    v_user_id,
-    'Acopio de Ejemplo — Parroquia La Candelaria',
-    'Somos un centro de acopio comunitario que coordina la recepcion y distribucion de ayuda humanitaria en la Parroquia La Candelaria y zonas aledanas. Trabajamos en conjunto con iglesias, consejos comunales y voluntarios de la zona para hacer llegar la ayuda a quien mas la necesita.
-
-Horario de recepcion: lunes a sabado, 8:00 am a 4:00 pm.
-
-Si queres colaborar como voluntario, escribinos por WhatsApp o acercate en el horario indicado. Toda ayuda suma.',
-    'Av. Urdaneta, entre Esq. de Candelaria y Esq. de Romualda, Edif. Parroquial, Planta Baja',
+  INSERT INTO public.centros_acopio (id, coordinador_id, nombre, descripcion, direccion, ciudad, contacto, created_at)
+  VALUES (c_caracas, u_maria,
+    'Acopio La Candelaria',
+    'Centro de acopio comunitario en el corazon de Caracas. Recibimos donaciones de lunes a sabado de 8am a 4pm. Coordinamos con 12 consejos comunales de la parroquia para distribuir la ayuda.',
+    'Av. Urdaneta, entre Esq. de Candelaria y Esq. de Romualda, Edif. Parroquial, PB',
     'Caracas',
     '0412-5550101',
-    null,
-    v_ahora - interval '30 days'
-  );
+    v_ahora - interval '45 days');
 
-  -- -----------------------------------------------------------------------
-  -- 2. Crear varios posts de ejemplo con fechas espaciadas
-  --    (del mas reciente al mas antiguo)
-  -- -----------------------------------------------------------------------
+  INSERT INTO public.centros_acopio (id, coordinador_id, nombre, descripcion, direccion, ciudad, contacto, created_at)
+  VALUES (c_valencia, u_carlos,
+    'Acopio Valencia Norte — Grupo Scout',
+    'Operamos desde la sede del Grupo Scout Valencia Norte. Contamos con espacio de bodega y un equipo de 25 voluntarios fijos. Jornadas de entrega todos los sabados.',
+    'Av. Bolivar Norte, CC Las Chimeneas, Local 3, Naguanagua',
+    'Valencia',
+    '0414-3332020',
+    v_ahora - interval '30 days');
 
-  -- Día 0 (hoy)
-  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at)
-  VALUES (gen_random_uuid(), v_centro_id,
-    'ACTUALIZACION IMPORTANTE: Ya no estamos recibiendo ropa por falta de espacio. Seguimos necesitando con urgencia agua potable y medicamentos basicos. Si podes traer acetaminofen, ibuprofeno o antialergicos seria de gran ayuda.',
-    ARRAY['Agua', 'Medicamentos'],
-    v_ahora
-  );
+  INSERT INTO public.centros_acopio (id, coordinador_id, nombre, descripcion, direccion, ciudad, contacto, created_at)
+  VALUES (c_maracaibo, u_diana,
+    'Acopio Maracaibo — Parroquia Santa Lucia',
+    'Centro de acopio en el oeste de Maracaibo. Trabajamos con la red de iglesias de la zona. Necesitamos especialmente medicamentos y agua.',
+    'Calle 72 con Av. 14, Parroquia Santa Lucia, Casa Parroquial',
+    'Maracaibo',
+    '0261-7773344',
+    v_ahora - interval '20 days');
 
-  -- Día 0 (hace 2 horas)
-  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at)
-  VALUES (gen_random_uuid(), v_centro_id,
-    'Gracias a todos los que donaron panales esta semana. Logramos cubrir 15 familias con bebes. Ahora mismo necesitamos alimentos no perecederos: arroz, pasta, caraotas, harina de maiz, aceite. Cualquier cantidad sirve.',
-    ARRAY['Alimentos no perecederos', 'Pañales'],
-    v_ahora - interval '2 hours'
-  );
+  -- =======================================================================
+  -- Posts de centros
+  -- =======================================================================
 
-  -- Día -1 (ayer)
-  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at)
-  VALUES (gen_random_uuid(), v_centro_id,
-    'Hoy recibimos una donacion grande de ropa del Liceo Andres Bello. Vamos a estar clasificando durante el fin de semana. Si queres ayudar como voluntario para organizar y armar paquetes, escribinos. Necesitamos manos.',
-    ARRAY['Voluntarios', 'Ropa'],
-    v_ahora - interval '1 day'
-  );
+  -- CARACAS
+  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at, user_id)
+  VALUES (gen_random_uuid(), c_caracas,
+    'URGENTE: Necesitamos agua potable para distribuir manana. Tenemos 30 familias en lista de espera y solo alcanzo para 12. Si alguien puede traer botellones o bidones de agua hoy antes de las 4pm, seria de enorme ayuda.',
+    ARRAY['Agua'], v_ahora - interval '2 hours', u_maria);
 
-  -- Día -1 (ayer, tarde)
-  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at)
-  VALUES (gen_random_uuid(), v_centro_id,
-    'IMPORTANTE: Este sabado 29 no abriremos porque el edificio parroquial estara cerrado por mantenimiento. Retomamos actividades el lunes en horario normal (8am a 4pm). Disculpen las molestias.',
-    ARRAY['Otros'],
-    v_ahora - interval '1 day 6 hours'
-  );
+  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at, user_id)
+  VALUES (gen_random_uuid(), c_caracas,
+    'GRACIAS a todos los que donaron medicamentos la semana pasada. Logramos cubrir a 18 adultos mayores con sus tratamientos. Ahora necesitamos: acetaminofen infantil, ibuprofeno, antialergicos y cremas para quemaduras.',
+    ARRAY['Medicamentos'], v_ahora - interval '1 day', u_maria);
 
-  -- Día -3
-  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at)
-  VALUES (gen_random_uuid(), v_centro_id,
-    'Buenas noticias: conseguimos un camion que nos va a ayudar con la logistica de distribucion a partir de la semana que viene. Esto nos va a permitir llegar a zonas mas alejadas como Petare y el 23 de Enero. Estamos afinando las rutas.',
-    ARRAY['Combustible', 'Voluntarios'],
-    v_ahora - interval '3 days'
-  );
+  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at, user_id)
+  VALUES (gen_random_uuid(), c_caracas,
+    'Este sabado tendremos jornada especial de entrega de ropa y alimentos en la cancha de La Candelaria de 9am a 1pm. Necesitamos voluntarios para ayudar a organizar.',
+    ARRAY['Voluntarios', 'Ropa', 'Alimentos no perecederos'], v_ahora - interval '3 days', u_maria);
 
-  -- Día -4
-  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at)
-  VALUES (gen_random_uuid(), v_centro_id,
-    'Agradecemos enormemente a la Fundacion Manos Unidas por la donacion de 500 kg de alimentos no perecederos que recibimos ayer. Con esto podemos armar al menos 80 bolsas de comida para familias de la parroquia. Seguimos necesitando aceite vegetal y leche en polvo.',
-    ARRAY['Alimentos no perecederos'],
-    v_ahora - interval '4 days'
-  );
+  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at, user_id)
+  VALUES (gen_random_uuid(), c_caracas,
+    'Recibimos una donacion de 200 panales de la Fundacion Manos Unidas. Ya empezamos a distribuirlos entre madres de la comunidad. Si conoces a alguien que necesite, que se acerque con su cedula del bebe.',
+    ARRAY['Pañales'], v_ahora - interval '5 days', u_maria);
 
-  -- Día -6
-  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at)
-  VALUES (gen_random_uuid(), v_centro_id,
-    'ATENCION: Este miercoles estaremos recibiendo donaciones en horario extendido hasta las 7pm. Tambien pueden traer herramientas en buen estado (martillos, destornilladores, palas) que estamos ayudando a unas familias a reparar sus viviendas. Gracias de antemano.',
-    ARRAY['Herramientas', 'Voluntarios'],
-    v_ahora - interval '6 days'
-  );
+  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at, user_id)
+  VALUES (gen_random_uuid(), c_caracas,
+    'Actualizacion: ampliamos horario de recepcion. Ahora de lunes a sabado de 7am a 5pm. Tambien aceptamos herramientas en buen estado y articulos de higiene personal.',
+    ARRAY['Herramientas', 'Higiene personal'], v_ahora - interval '8 days', u_maria);
 
-  -- Día -8
-  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at)
-  VALUES (gen_random_uuid(), v_centro_id,
-    'Gracias a la campana de recoleccion de esta semana logramos juntar 300 litros de agua potable que ya fueron distribuidos en el sector La Quinta. Seguimos necesitando mas agua embotellada, especialmente ahora que se acerca la temporada de calor.',
-    ARRAY['Agua'],
-    v_ahora - interval '8 days'
-  );
+  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at, user_id)
+  VALUES (gen_random_uuid(), c_caracas,
+    'Fin de semana exitoso. 47 familias recibieron bolsas de comida y kits de higiene. Sin ustedes esto no seria posible. Vamos por mas.',
+    ARRAY['Alimentos no perecederos', 'Higiene personal'], v_ahora - interval '12 days', u_maria);
 
-  -- Día -10
-  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at)
-  VALUES (gen_random_uuid(), v_centro_id,
-    'Les presentamos a nuestro nuevo equipo de voluntarios fijos: Ana, Carlos, Mariangel y Jose. Ellos van a estar ayudando con la recepcion los martes y jueves. Si queres sumarte como voluntario fijo o puntual, escribinos. Toda ayuda es bienvenida.',
-    ARRAY['Voluntarios'],
-    v_ahora - interval '10 days'
-  );
+  -- VALENCIA
+  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at, user_id)
+  VALUES (gen_random_uuid(), c_valencia,
+    'Manana jornada de recoleccion en el CC Las Chimeneas de 10am a 3pm. Traigan alimentos no perecederos, ropa en buen estado y medicinas. Estacionamiento nivel 1.',
+    ARRAY['Alimentos no perecederos', 'Ropa', 'Medicamentos'], v_ahora - interval '1 day', u_carlos);
 
-  -- Día -12
-  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at)
-  VALUES (gen_random_uuid(), v_centro_id,
-    'URGENTE: Necesitamos medicamentos para una senora de 72 anos con hipertension que no ha conseguido su tratamiento. Especificamente: losartan 50mg y amlodipina 5mg. Si alguien puede colaborar con estos medicamentos o similares por favor contactarnos.',
-    ARRAY['Medicamentos'],
-    v_ahora - interval '12 days'
-  );
+  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at, user_id)
+  VALUES (gen_random_uuid(), c_valencia,
+    'Necesitamos combustible para el camion de distribucion. Este viernes tenemos pautada una entrega en tres comunidades alejadas y no tenemos como llegar.',
+    ARRAY['Combustible'], v_ahora - interval '4 days', u_carlos);
 
-  -- Día -15
-  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at)
-  VALUES (gen_random_uuid(), v_centro_id,
-    'Compartimos algunas fotos de la jornada de entrega del sabado pasado. Logramos atender a 45 familias con bolsas de comida, kits de higiene y medicamentos. Sin ustedes esto no seria posible. Gracias a cada persona que dono y a cada voluntario que estuvo presente.',
-    ARRAY['Agua', 'Alimentos no perecederos', 'Medicamentos', 'Higiene personal'],
-    v_ahora - interval '15 days'
-  );
+  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at, user_id)
+  VALUES (gen_random_uuid(), c_valencia,
+    'Nuestros voluntarios armaron 65 bolsas de comida. Aun nos falta arroz, harina de maiz y aceite para completar otras 20.',
+    ARRAY['Alimentos no perecederos', 'Voluntarios'], v_ahora - interval '6 days', u_carlos);
 
-  -- Día -18
-  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at)
-  VALUES (gen_random_uuid(), v_centro_id,
-    'Estamos haciendo una campana de recoleccion de kits de higiene personal. Lo ideal es: jabon de bano, champu, pasta dental, cepillo de dientes, toallas sanitarias y papel higienico. Pueden traer los articulos sueltos, nosotros armamos los kits aca.',
-    ARRAY['Higiene personal'],
-    v_ahora - interval '18 days'
-  );
+  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at, user_id)
+  VALUES (gen_random_uuid(), c_valencia,
+    'ATENCION: este miercoles NO abriremos por inventario. Retomamos el jueves en horario normal.',
+    ARRAY['Otros'], v_ahora - interval '9 days', u_carlos);
 
-  -- Día -21
-  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at)
-  VALUES (gen_random_uuid(), v_centro_id,
-    'A partir de hoy tenemos un nuevo numero de contacto exclusivo para WhatsApp: 0412-5550101. Por favor usen este numero para coordinar entregas y consultas. El telefono anterior queda solo para emergencias. Compartan para que llegue a mas gente.',
-    ARRAY['Otros'],
-    v_ahora - interval '21 days'
-  );
+  -- MARACAIBO
+  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at, user_id)
+  VALUES (gen_random_uuid(), c_maracaibo,
+    'URGENTE: se nos acabo el agua embotellada. Con el calor en Maracaibo la demanda se triplico. Si alguien puede donar botellones, por favor acerquense.',
+    ARRAY['Agua'], v_ahora - interval '6 hours', u_diana);
 
-  -- Día -25
-  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at)
-  VALUES (gen_random_uuid(), v_centro_id,
-    'Buen inicio de semana para todos. Les recordamos nuestros horarios: lunes a sabado de 8am a 4pm. Aceptamos donaciones de alimentos no perecederos, agua, medicinas, ropa en buen estado, articulos de higiene y herramientas. Todo lo que traigan se entrega a familias de la comunidad. Gracias por su solidaridad.',
-    ARRAY['Agua', 'Ropa', 'Medicamentos', 'Alimentos no perecederos', 'Higiene personal', 'Herramientas'],
-    v_ahora - interval '25 days'
-  );
+  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at, user_id)
+  VALUES (gen_random_uuid(), c_maracaibo,
+    'Donacion enorme de ropa y zapatos del Colegio Gonzaga. Estamos clasificando por tallas. Si necesitas ropa para ninos o adultos, acercate de 9am a 3pm.',
+    ARRAY['Ropa'], v_ahora - interval '2 days', u_diana);
 
-  -- -----------------------------------------------------------------------
-  -- 3. Confirmacion
-  -- -----------------------------------------------------------------------
-  RAISE NOTICE 'Seed completado. Centro ID: %, Coordinador: %. Revisa la app en http://localhost:5173', v_centro_id, v_user_id;
+  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at, user_id)
+  VALUES (gen_random_uuid(), c_maracaibo,
+    'Conseguimos un proveedor que dona 100 kg de alimentos al mes. Esto nos da mas estabilidad. Seguimos necesitando medicinas e higiene personal.',
+    ARRAY['Alimentos no perecederos', 'Medicamentos', 'Higiene personal'], v_ahora - interval '7 days', u_diana);
 
+  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at, user_id)
+  VALUES (gen_random_uuid(), c_maracaibo,
+    'Llamado a voluntarios: necesitamos gente para logistica los viernes. Si tenes carro o camioneta, mejor. Escribinos al 0261-7773344.',
+    ARRAY['Voluntarios', 'Combustible'], v_ahora - interval '10 days', u_diana);
+
+  -- COMUNITARIOS (sin centro)
+  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at, user_id)
+  VALUES (gen_random_uuid(), null,
+    'Hola comunidad. Soy estudiante de medicina organizando recolecta de medicinas vencidas para desecho correcto. Si tenes en casa no las botes, escribime.',
+    ARRAY['Medicamentos', 'Otros'], v_ahora - interval '1 day', u_jose);
+
+  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at, user_id)
+  VALUES (gen_random_uuid(), null,
+    'Alguien sabe de algun centro recibiendo ropa de bebe en Caracas? Tengo bolsas en buen estado para donar.',
+    ARRAY['Ropa', 'Pañales'], v_ahora - interval '3 days', u_ana);
+
+  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at, user_id)
+  VALUES (gen_random_uuid(), null,
+    'Manana voy a La Candelaria a dejar agua y alimentos. Si alguien de la zona quiere coordinar para ir juntos, me avisa.',
+    ARRAY['Agua', 'Alimentos no perecederos'], v_ahora - interval '12 hours', u_pedro);
+
+  INSERT INTO public.posts (id, centro_id, contenido, necesidades, created_at, user_id)
+  VALUES (gen_random_uuid(), null,
+    'Reflexion: a veces pensamos que uno solo no hace diferencia. Pero si cada uno dona un kilo de arroz o un panal, entre todos logramos un monton. Animate.',
+    ARRAY['Otros'], v_ahora - interval '5 days', u_laura);
+
+  -- =======================================================================
+  -- Comentarios
+  -- =======================================================================
+
+  DECLARE
+    p_ids uuid[];
+  BEGIN
+    SELECT array_agg(id ORDER BY created_at DESC) INTO p_ids FROM public.posts;
+
+    -- Comentarios en posts de Caracas (indices 0-5)
+    INSERT INTO public.post_comentario (id, post_id, user_id, contenido, created_at) VALUES (gen_random_uuid(), p_ids[1], u_carlos, 'Yo puedo llevar dos bidones de 5 litros manana. A que hora abren?', v_ahora - interval '1 hour');
+    INSERT INTO public.post_comentario (id, post_id, user_id, contenido, created_at) VALUES (gen_random_uuid(), p_ids[1], u_ana, 'Tengo botellones. Paso tipo 10am.', v_ahora - interval '30 minutes');
+
+    INSERT INTO public.post_comentario (id, post_id, user_id, contenido, created_at) VALUES (gen_random_uuid(), p_ids[2], u_jose, 'Que bueno. Tengo acetaminofen infantil, paso manana.', v_ahora - interval '5 hours');
+    INSERT INTO public.post_comentario (id, post_id, user_id, contenido, created_at) VALUES (gen_random_uuid(), p_ids[2], u_laura, 'Mi mama necesita antialergicos. Tienen aun?', v_ahora - interval '3 hours');
+    INSERT INTO public.post_comentario (id, post_id, user_id, contenido, created_at) VALUES (gen_random_uuid(), p_ids[2], u_maria, 'Laura si, todavia nos quedan. Acercate de 8 a 4!', v_ahora - interval '2 hours');
+
+    INSERT INTO public.post_comentario (id, post_id, user_id, contenido, created_at) VALUES (gen_random_uuid(), p_ids[3], u_pedro, 'Me anoto de voluntario. A que hora llego?', v_ahora - interval '1 day');
+    INSERT INTO public.post_comentario (id, post_id, user_id, contenido, created_at) VALUES (gen_random_uuid(), p_ids[3], u_diana, 'Desde Maracaibo les mando un abrazo. Sigan asi.', v_ahora - interval '20 hours');
+
+    INSERT INTO public.post_comentario (id, post_id, user_id, contenido, created_at) VALUES (gen_random_uuid(), p_ids[4], u_ana, 'MI HERMANA NECESITA PAÑALES TALLA M. TIENEN?', v_ahora - interval '2 days');
+    INSERT INTO public.post_comentario (id, post_id, user_id, contenido, created_at) VALUES (gen_random_uuid(), p_ids[4], u_maria, 'Ana si tenemos! Acercate con cedula del bebe.', v_ahora - interval '2 days');
+
+    -- Valencia (indices 7-10)
+    INSERT INTO public.post_comentario (id, post_id, user_id, contenido, created_at) VALUES (gen_random_uuid(), p_ids[7], u_ana, 'Voy a llevar ropa y latas de atun. Nos vemos alla.', v_ahora - interval '5 hours');
+    INSERT INTO public.post_comentario (id, post_id, user_id, contenido, created_at) VALUES (gen_random_uuid(), p_ids[7], u_jose, 'A que hora es? En la manana o tarde?', v_ahora - interval '4 hours');
+    INSERT INTO public.post_comentario (id, post_id, user_id, contenido, created_at) VALUES (gen_random_uuid(), p_ids[7], u_carlos, 'Jose, de 10am a 3pm. Te esperamos.', v_ahora - interval '3 hours');
+
+    INSERT INTO public.post_comentario (id, post_id, user_id, contenido, created_at) VALUES (gen_random_uuid(), p_ids[8], u_pedro, 'Tengo un contacto que puede ayudar. Te paso el numero.', v_ahora - interval '2 days');
+    INSERT INTO public.post_comentario (id, post_id, user_id, contenido, created_at) VALUES (gen_random_uuid(), p_ids[8], u_maria, 'En Caracas tambien necesitamos. Si conseguis dato compartan.', v_ahora - interval '1 day');
+
+    INSERT INTO public.post_comentario (id, post_id, user_id, contenido, created_at) VALUES (gen_random_uuid(), p_ids[9], u_laura, 'Que buen trabajo. Puedo donar dos kilos de arroz manana.', v_ahora - interval '3 days');
+    INSERT INTO public.post_comentario (id, post_id, user_id, contenido, created_at) VALUES (gen_random_uuid(), p_ids[9], u_diana, 'Excelente labor. Desde Maracaibo los felicito.', v_ahora - interval '2 days');
+
+    -- Maracaibo (indices 11-14)
+    INSERT INTO public.post_comentario (id, post_id, user_id, contenido, created_at) VALUES (gen_random_uuid(), p_ids[11], u_pedro, 'Tengo un botellon de 20 litros. Donde los dejo?', v_ahora - interval '3 hours');
+    INSERT INTO public.post_comentario (id, post_id, user_id, contenido, created_at) VALUES (gen_random_uuid(), p_ids[11], u_diana, 'Pedro, en Parroquia Santa Lucia, C 72 con Av 14. Gracias!', v_ahora - interval '2 hours');
+
+    INSERT INTO public.post_comentario (id, post_id, user_id, contenido, created_at) VALUES (gen_random_uuid(), p_ids[12], u_ana, 'Tienen ropa para ninos de 4 anos?', v_ahora - interval '1 day');
+    INSERT INTO public.post_comentario (id, post_id, user_id, contenido, created_at) VALUES (gen_random_uuid(), p_ids[12], u_jose, 'Necesito zapatos talla 42. Tienen?', v_ahora - interval '20 hours');
+    INSERT INTO public.post_comentario (id, post_id, user_id, contenido, created_at) VALUES (gen_random_uuid(), p_ids[12], u_diana, 'Ana y Jose, vengan que estamos clasificando justo esas tallas.', v_ahora - interval '18 hours');
+
+    -- Comunitarios (indices 15-18)
+    INSERT INTO public.post_comentario (id, post_id, user_id, contenido, created_at) VALUES (gen_random_uuid(), p_ids[15], u_ana, 'Buena iniciativa. Tengo cajas de medicinas vencidas. Como hago?', v_ahora - interval '5 hours');
+    INSERT INTO public.post_comentario (id, post_id, user_id, contenido, created_at) VALUES (gen_random_uuid(), p_ids[15], u_laura, 'Me sumo. Tambien soy estudiante de medicina.', v_ahora - interval '3 hours');
+
+    INSERT INTO public.post_comentario (id, post_id, user_id, contenido, created_at) VALUES (gen_random_uuid(), p_ids[16], u_maria, 'Ana, en La Candelaria recibimos ropa de bebe. Acercate de 8 a 4.', v_ahora - interval '1 day');
+    INSERT INTO public.post_comentario (id, post_id, user_id, contenido, created_at) VALUES (gen_random_uuid(), p_ids[16], u_carlos, 'En Valencia Norte tambien recibimos. Escribime.', v_ahora - interval '20 hours');
+
+    INSERT INTO public.post_comentario (id, post_id, user_id, contenido, created_at) VALUES (gen_random_uuid(), p_ids[18], u_pedro, 'Totalmente de acuerdo. Empece donando un kilo de arroz y ahora soy voluntario. Todo suma.', v_ahora - interval '2 days');
+    INSERT INTO public.post_comentario (id, post_id, user_id, contenido, created_at) VALUES (gen_random_uuid(), p_ids[18], u_jose, 'Que bonito mensaje. Gracias por recordarlo.', v_ahora - interval '1 day');
+  END;
+
+  -- =======================================================================
+  -- Utiles en posts
+  -- =======================================================================
+  FOR p_id IN SELECT id FROM public.posts LIMIT 18 LOOP
+    INSERT INTO public.post_util (id, post_id, user_id, created_at)
+    VALUES
+      (gen_random_uuid(), p_id, u_ana,   v_ahora - interval '1 day'),
+      (gen_random_uuid(), p_id, u_jose,  v_ahora - interval '2 days'),
+      (gen_random_uuid(), p_id, u_laura, v_ahora - interval '3 days')
+    ON CONFLICT (post_id, user_id) DO NOTHING;
+  END LOOP;
+
+  -- =======================================================================
+  -- Utiles en comentarios
+  -- =======================================================================
+  FOR co_id IN SELECT id FROM public.post_comentario WHERE user_id != u_maria AND user_id != u_carlos AND user_id != u_diana LIMIT 12 LOOP
+    INSERT INTO public.comentario_util (id, comentario_id, user_id, created_at)
+    VALUES (gen_random_uuid(), co_id, u_maria, v_ahora - interval '1 day')
+    ON CONFLICT (comentario_id, user_id) DO NOTHING;
+  END LOOP;
+
+  FOR co_id IN SELECT id FROM public.post_comentario WHERE user_id != u_pedro AND user_id != u_ana LIMIT 8 LOOP
+    INSERT INTO public.comentario_util (id, comentario_id, user_id, created_at)
+    VALUES (gen_random_uuid(), co_id, u_pedro, v_ahora - interval '2 days')
+    ON CONFLICT (comentario_id, user_id) DO NOTHING;
+  END LOOP;
+
+  RAISE NOTICE 'Seed listo. 3 centros, 18 posts, 30+ comentarios, likes incluidos.';
 END$$;

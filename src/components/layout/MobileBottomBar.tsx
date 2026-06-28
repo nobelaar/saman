@@ -18,7 +18,7 @@ export function MobileBottomBar({ user }: Props) {
   return (
     <>
       <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
-      <nav className="fixed bottom-0 left-0 right-0 z-20 flex h-14 items-center justify-around border-t border-border bg-black pb-[env(safe-area-inset-bottom,0px)] lg:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 z-20 flex h-14 items-center justify-around border-t border-border bg-background pb-[env(safe-area-inset-bottom,0px)] lg:hidden">
         <Tab to="/" icon={Home} label="Inicio" />
         <Tab to="/comunidad" icon={Users} label="Comunidad" />
         <button

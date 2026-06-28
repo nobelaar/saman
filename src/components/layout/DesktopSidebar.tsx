@@ -3,6 +3,7 @@ import type { AuthUser } from '@/types/db'
 import { Home, Search, PlusCircle, User, Users, LogOut } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { NotificationBell } from '@/components/notificacion/NotificationBell'
+import { ThemeToggle } from './ThemeToggle'
 
 interface Props {
   user: AuthUser | null
@@ -35,6 +36,7 @@ export function DesktopSidebar({ user, onLogout }: Props) {
       {user ? (
         <div className="mt-auto space-y-2">
           <NotificationBell userId={user.id} />
+          <ThemeToggle />
           <button
             type="button"
             onClick={onLogout}

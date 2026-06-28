@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom'
 import type { AuthUser } from '@/types/db'
 import { ArrowLeft, HeartHandshake } from 'lucide-react'
 import { NotificationBell } from '@/components/notificacion/NotificationBell'
+import { ThemeToggle } from './ThemeToggle'
 
 interface Props {
   user?: AuthUser | null
@@ -12,7 +13,7 @@ export function Navbar({ user }: Props) {
   const isSubPage = location.pathname !== '/' && location.pathname !== '/centros' && location.pathname !== '/comunidad'
 
   return (
-    <header className="sticky top-0 z-10 border-b border-border bg-black lg:hidden">
+    <header className="sticky top-0 z-10 border-b border-border bg-background lg:hidden">
       <nav className="flex h-11 items-center px-4">
         {isSubPage ? (
           <div className="flex items-center gap-3">
@@ -29,7 +30,8 @@ export function Navbar({ user }: Props) {
             <span className="text-[17px] font-bold tracking-tight">Acopio</span>
           </Link>
         )}
-        <div className="ml-auto">
+        <div className="ml-auto flex items-center gap-1">
+          <ThemeToggle />
           <NotificationBell userId={user?.id} />
         </div>
       </nav>

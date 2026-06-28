@@ -28,7 +28,7 @@ export function SearchOverlay({ open, onClose }: Props) {
 
   return (
     <div
-      className="fixed inset-x-0 top-0 z-30 flex flex-col bg-black animate-in slide-in-from-bottom duration-200"
+      className="fixed inset-x-0 top-0 z-30 flex flex-col bg-background animate-in slide-in-from-bottom duration-200"
       style={{ height: '100dvh' }}
     >
       <div className="flex shrink-0 items-center gap-3 border-b border-border px-4 py-2">

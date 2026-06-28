@@ -79,6 +79,7 @@ export interface PostComentario {
   post_id: string
   user_id: string
   contenido: string
+  autor_email: string | null
   created_at: string
 }
 

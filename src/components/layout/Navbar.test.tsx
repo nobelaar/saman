@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { describe, expect, it } from 'vitest'
 import { MemoryRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { ThemeProvider } from '@/lib/theme'
 import { Navbar } from './Navbar'
 
 const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
@@ -13,12 +14,14 @@ function renderAt(path = '/') {
   }
   return render(
     <QueryClientProvider client={queryClient}>
-      <MemoryRouter initialEntries={[path]}>
-        <Navbar user={null} />
-        <Routes>
-          <Route path="*" element={<LocationProbe />} />
-        </Routes>
-      </MemoryRouter>
+      <ThemeProvider>
+        <MemoryRouter initialEntries={[path]}>
+          <Navbar user={null} />
+          <Routes>
+            <Route path="*" element={<LocationProbe />} />
+          </Routes>
+        </MemoryRouter>
+      </ThemeProvider>
     </QueryClientProvider>
   )
 }

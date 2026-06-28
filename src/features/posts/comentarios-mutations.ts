@@ -15,7 +15,7 @@ export function useCrearComentario() {
       if (!user) throw new Error('Debes iniciar sesion para comentar')
       const { data, error } = await supabase
         .from('post_comentario')
-        .insert({ post_id: postId, contenido, user_id: user.id })
+        .insert({ post_id: postId, contenido, user_id: user.id, autor_email: user.email })
         .select()
         .single()
       if (error) throw error

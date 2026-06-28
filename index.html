@@ -6,6 +6,12 @@
     <meta name="theme-color" content="#000000" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>Acopio — Centros de ayuda humanitaria</title>
+    <script>
+      (function () {
+        var t = localStorage.getItem('acopio-theme')
+        if (t === 'dark') document.documentElement.classList.add('dark')
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>
