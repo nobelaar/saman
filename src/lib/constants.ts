@@ -11,6 +11,21 @@ export const NECESIDADES_PREDEFINIDAS = [
   'Otros',
 ] as const
 
+type Necesidad = (typeof NECESIDADES_PREDEFINIDAS)[number]
+
+export const NECESIDAD_META: Record<Necesidad, { emoji: string; color: string }> = {
+  Agua:    { emoji: '💧', color: '#3B82F6' },
+  Ropa:    { emoji: '👕', color: '#8B5CF6' },
+  Medicamentos: { emoji: '💊', color: '#EF4444' },
+  Pañales: { emoji: '👶', color: '#F59E0B' },
+  'Alimentos no perecederos': { emoji: '🥫', color: '#10B981' },
+  'Higiene personal': { emoji: '🧼', color: '#06B6D4' },
+  Combustible: { emoji: '⛽', color: '#F97316' },
+  Herramientas: { emoji: '🔧', color: '#6B7280' },
+  Voluntarios: { emoji: '🤝', color: '#EC4899' },
+  Otros:    { emoji: '📦', color: '#78716C' },
+}
+
 export const DEFAULT_FALLBACK_PHOTO =
   'data:image/svg+xml;utf8,' +
   encodeURIComponent(

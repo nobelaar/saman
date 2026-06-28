@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { NECESIDADES_PREDEFINIDAS } from '@/lib/constants'
+import { NECESIDADES_PREDEFINIDAS, NECESIDAD_META } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
 interface Props {
@@ -32,6 +32,7 @@ export function NecesidadesSelector({ value, onChange }: Props) {
       <div className="flex flex-wrap gap-2">
         {NECESIDADES_PREDEFINIDAS.map((n) => {
           const active = value.includes(n)
+          const meta = NECESIDAD_META[n]
           return (
             <button
               key={n}
@@ -41,11 +42,12 @@ export function NecesidadesSelector({ value, onChange }: Props) {
               className={cn(
                 'rounded-full border px-3 py-1.5 text-sm transition-colors',
                 active
-                  ? 'bg-primary text-primary-foreground border-primary'
-                  : 'bg-background text-foreground border-input hover:bg-accent'
+                  ? 'border-primary text-primary-foreground'
+                  : 'border-input text-foreground hover:bg-accent'
               )}
+              style={active ? { backgroundColor: meta?.color ?? '#F97316' } : undefined}
             >
-              {n}
+              {meta?.emoji} {n}
             </button>
           )
         })}

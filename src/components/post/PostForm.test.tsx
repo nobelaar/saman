@@ -32,7 +32,7 @@ describe('PostForm', () => {
     await user.type(textarea, 'Urgente: necesitamos velas y agua.')
     // Toggle extras to show necesidades selector
     await user.click(screen.getByRole('button', { name: '' }))
-    await user.click(screen.getByRole('button', { name: /^Agua$/ }))
+    await user.click(screen.getByRole('button', { name: /Agua/ }))
     await user.type(screen.getByPlaceholderText(/Otra necesidad/i), 'Lentes{Enter}')
     await user.click(screen.getByRole('button', { name: /publicar/i }))
     await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1))
@@ -76,7 +76,7 @@ describe('PostForm', () => {
     await user.type(textarea, 'Prueba reset')
     // Toggle extras to show necesidades
     await user.click(screen.getByRole('button', { name: '' }))
-    await user.click(screen.getByRole('button', { name: /^Agua$/ }))
+    await user.click(screen.getByRole('button', { name: /Agua/ }))
     await user.click(screen.getByRole('button', { name: /publicar/i }))
     await waitFor(() => expect(onSubmit).toHaveBeenCalled())
     expect(textarea.value).toBe('')

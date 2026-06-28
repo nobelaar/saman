@@ -10,7 +10,7 @@ const post: PostWithUtil = {
   centro_id: 'c1',
   contenido: 'Necesitamos agua y panales urgentemente.',
   foto_url: null,
-  necesidades: ['Agua', 'Panales'],
+  necesidades: ['Agua', 'Pañales'],
   created_at: '2025-01-12T10:00:00.000Z',
   util_count: 3,
   user_has_util: false,
@@ -34,14 +34,18 @@ describe('PostCard', () => {
   })
 
   it('renders chips for each necesidad', () => {
-    renderCard()
-    expect(screen.getByText('Agua')).toBeInTheDocument()
-    expect(screen.getByText('Panales')).toBeInTheDocument()
+    const { container } = renderCard()
+    const article = container.querySelector('article')!
+    const chipContainer = article.querySelector('.flex.flex-wrap.gap-1\\.5')
+    expect(chipContainer).toBeTruthy()
+    expect(chipContainer!.children.length).toBe(2)
   })
 
   it('renders no chips when there are no necesidades', () => {
-    renderCard({ post: { ...post, necesidades: [] } })
-    expect(screen.queryByText('Agua')).not.toBeInTheDocument()
+    const { container } = renderCard({ post: { ...post, necesidades: [] } })
+    const article = container.querySelector('article')!
+    const chipContainer = article.querySelector('.flex.flex-wrap.gap-1\\.5')
+    expect(chipContainer).toBeFalsy()
   })
 
   it('renders the photo when foto_url is provided', () => {

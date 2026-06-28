@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { Input } from '@/components/ui/input'
 import { useCentros } from '@/features/centros/queries'
 import { X } from 'lucide-react'
-import { NECESIDADES_PREDEFINIDAS } from '@/lib/constants'
+import { NECESIDADES_PREDEFINIDAS, NECESIDAD_META } from '@/lib/constants'
 
 interface Props {
   open: boolean
@@ -46,18 +46,19 @@ export function SearchOverlay({ open, onClose }: Props) {
       <div className="flex-1 overflow-auto pb-4">
         {!query.trim() && (
           <div className="flex flex-wrap gap-2 px-4 py-3">
-            {NECESIDADES_PREDEFINIDAS.slice(0, 6).map((n) => (
-              <button
-                key={n}
-                type="button"
-                onClick={() => {
-                  setQuery(n)
-                }}
-                className="rounded-full bg-secondary px-4 py-1.5 text-[13px] text-muted-foreground hover:bg-primary/10 hover:text-primary"
-              >
-                {n}
-              </button>
-            ))}
+            {NECESIDADES_PREDEFINIDAS.slice(0, 6).map((n) => {
+              const meta = NECESIDAD_META[n]
+              return (
+                <button
+                  key={n}
+                  type="button"
+                  onClick={() => setQuery(n)}
+                  className="rounded-full bg-secondary px-4 py-1.5 text-[13px] text-muted-foreground hover:bg-primary/10 hover:text-primary"
+                >
+                  {meta?.emoji} {n}
+                </button>
+              )
+            })}
           </div>
         )}
 

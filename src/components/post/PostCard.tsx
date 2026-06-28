@@ -9,6 +9,7 @@ import { useSession } from '@/features/auth/session'
 import { ComentarioItem } from './ComentarioItem'
 import { ComentarioForm } from './ComentarioForm'
 import { addToast } from '@/lib/hooks/useToast'
+import { NECESIDAD_META } from '@/lib/constants'
 
 interface Props {
   post: PostWithUtil
@@ -80,14 +81,21 @@ export const PostCard = memo(function PostCard({ post, centroNombre, centroCiuda
 
       {post.necesidades.length > 0 && (
         <div className="mt-2 flex flex-wrap gap-1.5">
-          {post.necesidades.map((n) => (
-            <span
-              key={n}
-              className="rounded-full bg-primary/15 px-2.5 py-1 text-xs font-medium text-primary"
-            >
-              {n}
-            </span>
-          ))}
+          {post.necesidades.map((n) => {
+            const meta = NECESIDAD_META[n as keyof typeof NECESIDAD_META]
+            return (
+              <span
+                key={n}
+                className="rounded-full px-2.5 py-1 text-xs font-medium"
+                style={{
+                  backgroundColor: meta ? `${meta.color}20` : '#F9731620',
+                  color: meta?.color ?? '#F97316',
+                }}
+              >
+                {meta?.emoji} {n}
+              </span>
+            )
+          })}
         </div>
       )}
 
