@@ -28,7 +28,7 @@ describe('PostForm', () => {
     const user = userEvent.setup()
     const onSubmit = vi.fn()
     render(<PostForm centroId="c1" onSubmit={onSubmit} submitting={false} />)
-    const textarea = screen.getByPlaceholderText(/que necesita este centro/i)
+    const textarea = screen.getByPlaceholderText(/que queres compartir/i)
     await user.type(textarea, 'Urgente: necesitamos velas y agua.')
     // Toggle extras to show necesidades selector
     await user.click(screen.getByRole('button', { name: '' }))
@@ -46,7 +46,7 @@ describe('PostForm', () => {
     const user = userEvent.setup()
     const onSubmit = vi.fn()
     const { container } = render(<PostForm centroId="c1" onSubmit={onSubmit} submitting={false} />)
-    const textarea = screen.getByPlaceholderText(/que necesita este centro/i)
+    const textarea = screen.getByPlaceholderText(/que queres compartir/i)
     await user.type(textarea, 'Con foto.')
     // Toggle extras to show uploader
     await user.click(screen.getByRole('button', { name: '' }))
@@ -72,7 +72,7 @@ describe('PostForm', () => {
     const user = userEvent.setup()
     const onSubmit = vi.fn()
     render(<PostForm centroId="c1" onSubmit={onSubmit} submitting={false} />)
-    const textarea = screen.getByPlaceholderText(/que necesita este centro/i) as HTMLTextAreaElement
+    const textarea = screen.getByPlaceholderText(/que queres compartir/i) as HTMLTextAreaElement
     await user.type(textarea, 'Prueba reset')
     // Toggle extras to show necesidades
     await user.click(screen.getByRole('button', { name: '' }))

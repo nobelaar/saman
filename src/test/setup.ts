@@ -1,3 +1,6 @@
+process.env.VITE_SUPABASE_URL = 'http://localhost:54321'
+process.env.VITE_SUPABASE_ANON_KEY = 'test-anon-key'
+
 import '@testing-library/jest-dom/vitest'
 import { afterAll, afterEach, beforeAll, beforeEach } from 'vitest'
 import { server, resetStore } from './mocks'
