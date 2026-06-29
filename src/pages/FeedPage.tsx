@@ -103,7 +103,7 @@ export function FeedPage() {
         {(
           [
             ['todo', 'Todo'],
-            ['acopio', 'Acopio'],
+            ['acopio', 'Posts'],
             ['hospedaje', 'Hospedaje'],
           ] as const
         ).map(([key, label]) => (
