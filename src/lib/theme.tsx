@@ -11,7 +11,7 @@ const ThemeContext = createContext<ThemeContextValue | undefined>(undefined)
 
 function getInitialTheme(): Theme {
   try {
-    const stored = localStorage.getItem('acopio-theme')
+    const stored = localStorage.getItem('saman-theme')
     if (stored === 'dark') return 'dark'
     if (stored === 'light') return 'light'
   } catch {
@@ -40,7 +40,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     setTheme((prev) => {
       const next: Theme = prev === 'light' ? 'dark' : 'light'
       try {
-        localStorage.setItem('acopio-theme', next)
+        localStorage.setItem('saman-theme', next)
       } catch {
         // localStorage unavailable
       }

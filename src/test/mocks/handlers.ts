@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw'
-import type { CentroAcopio, Post, PostUtil, PostComentario, ComentarioUtil, Notificacion } from '@/types/db'
+import type { CentroAcopio, Post, PostUtil, PostComentario, ComentarioUtil, Notificacion, Anuncio, AnuncioUtil } from '@/types/db'
 import {
   fixtureCentro,
   fixtureCentro2,
@@ -10,6 +10,7 @@ import {
   fixtureComentarioUtil,
   fixtureNotificacion,
   fixtureSession,
+  fixtureAnuncio, fixtureAnuncio2, fixtureAnuncioUtil,
 } from './fixtures'
 
 const BASE = (import.meta.env.VITE_SUPABASE_URL as string) || 'https://acopio-test.supabase.co'
@@ -21,6 +22,8 @@ interface Store {
   comentarios: PostComentario[]
   comentarioUtils: ComentarioUtil[]
   notificaciones: Notificacion[]
+  anuncios: Anuncio[]
+  anuncioUtils: AnuncioUtil[]
 }
 
 let store: Store = makeStore()
@@ -43,6 +46,8 @@ function makeStore(): Store {
     comentarios: [structuredClone(fixtureComentario)],
     comentarioUtils: [structuredClone(fixtureComentarioUtil)],
     notificaciones: [structuredClone(fixtureNotificacion)],
+    anuncios: [structuredClone(fixtureAnuncio), structuredClone(fixtureAnuncio2)],
+    anuncioUtils: [structuredClone(fixtureAnuncioUtil)],
   }
 }
 
@@ -240,6 +245,68 @@ const restHandlers = [
     const { filters } = parseQuery(url)
     store.comentarioUtils = store.comentarioUtils.filter(
       (cu) => !(filters.comentario_id && cu.comentario_id === filters.comentario_id)
+    )
+    return HttpResponse.json(null, { status: 204 })
+  }),
+
+  http.get(`${BASE}/rest/v1/anuncio`, ({ request }) => {
+    const url = new URL(request.url)
+    const { filters, order } = parseQuery(url)
+    let rows = applyFilters(store.anuncios as unknown as Record<string, unknown>[], filters) as unknown as Anuncio[]
+    if (order) rows = applyOrder(rows, order, (r) => String(r[order!.column as keyof Anuncio])) as Anuncio[]
+    const limit = url.searchParams.get('limit')
+    if (limit) rows = rows.slice(0, parseInt(limit))
+    return responseObjectOrError(rows as unknown as Record<string, unknown>[], request)
+  }),
+
+  http.post(`${BASE}/rest/v1/anuncio`, async ({ request }) => {
+    const body = (await request.json()) as Partial<Anuncio> | Partial<Anuncio>[]
+    const payload = Array.isArray(body) ? body[0] : body
+    const created: Anuncio = {
+      id: crypto.randomUUID(),
+      tipo: payload.tipo ?? 'hospedaje',
+      titulo: payload.titulo ?? '',
+      descripcion: payload.descripcion ?? '',
+      ciudad: payload.ciudad ?? '',
+      zona: payload.zona ?? null,
+      contacto: payload.contacto ?? '',
+      centro_id: payload.centro_id ?? null,
+      user_id: payload.user_id ?? null,
+      capacidad: payload.capacidad ?? null,
+      duracion: payload.duracion ?? null,
+      mascotas: payload.mascotas ?? false,
+      accesibilidad: payload.accesibilidad ?? false,
+      activo: true,
+      created_at: new Date().toISOString(),
+    }
+    store.anuncios.push(created)
+    return HttpResponse.json(isObjectAccept(request) ? created : [created])
+  }),
+
+  http.get(`${BASE}/rest/v1/anuncio_util`, ({ request }) => {
+    const url = new URL(request.url)
+    const { filters } = parseQuery(url)
+    let rows = applyFilters(store.anuncioUtils as unknown as Record<string, unknown>[], filters)
+    return HttpResponse.json(rows)
+  }),
+
+  http.post(`${BASE}/rest/v1/anuncio_util`, async ({ request }) => {
+    const body = (await request.json()) as Partial<AnuncioUtil>
+    const created: AnuncioUtil = {
+      id: crypto.randomUUID(),
+      anuncio_id: body.anuncio_id ?? '',
+      user_id: body.user_id ?? '',
+      created_at: new Date().toISOString(),
+    }
+    store.anuncioUtils.push(created)
+    return HttpResponse.json(created)
+  }),
+
+  http.delete(`${BASE}/rest/v1/anuncio_util`, ({ request }) => {
+    const url = new URL(request.url)
+    const { filters } = parseQuery(url)
+    store.anuncioUtils = store.anuncioUtils.filter(
+      (au) => !(filters.anuncio_id && au.anuncio_id === filters.anuncio_id)
     )
     return HttpResponse.json(null, { status: 204 })
   }),

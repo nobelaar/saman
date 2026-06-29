@@ -1,3 +1,5 @@
+import type { AnuncioTipo } from '@/types/db'
+
 export const NECESIDADES_PREDEFINIDAS = [
   'Agua',
   'Ropa',
@@ -29,5 +31,19 @@ export const NECESIDAD_META: Record<Necesidad, { emoji: string; color: string }>
 export const DEFAULT_FALLBACK_PHOTO =
   'data:image/svg+xml;utf8,' +
   encodeURIComponent(
-    '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400"><rect width="400" height="400" fill="#f5f5f4"/><text x="50%" y="50%" font-family="sans-serif" font-size="20" fill="#a8a29e" text-anchor="middle" dominant-baseline="middle">Acopio</text></svg>'
+    '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400"><rect width="400" height="400" fill="#f5f5f4"/><text x="50%" y="50%" font-family="sans-serif" font-size="20" fill="#a8a29e" text-anchor="middle" dominant-baseline="middle">Saman</text></svg>'
   )
+
+export const ANUNCIO_TIPO_META: Record<AnuncioTipo, { emoji: string; label: string; color: string }> = {
+  hospedaje: { emoji: '🏠', label: 'Hospedaje', color: '#10B981' },
+} as const
+
+export const DURACION_OPCIONES = [
+  '1 semana',
+  '2 semanas',
+  '1 mes',
+  '3 meses',
+  'Indefinido',
+] as const
+
+export const CAPACIDAD_OPCIONES = [1, 2, 3, 4, 5, 6, '7+'] as const

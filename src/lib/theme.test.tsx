@@ -8,9 +8,9 @@ function wrapper({ children }: { children: React.ReactNode }) {
 
 function setLocalStorage(value: string | null) {
   if (value === null) {
-    localStorage.removeItem('acopio-theme')
+    localStorage.removeItem('saman-theme')
   } else {
-    localStorage.setItem('acopio-theme', value)
+    localStorage.setItem('saman-theme', value)
   }
 }
 
@@ -44,7 +44,7 @@ describe('useTheme', () => {
     const { result } = renderHook(() => useTheme(), { wrapper })
     act(() => result.current.toggleTheme())
     expect(result.current.theme).toBe('dark')
-    expect(localStorage.getItem('acopio-theme')).toBe('dark')
+    expect(localStorage.getItem('saman-theme')).toBe('dark')
     expect(document.documentElement.classList.contains('dark')).toBe(true)
   })
 
@@ -53,7 +53,7 @@ describe('useTheme', () => {
     const { result } = renderHook(() => useTheme(), { wrapper })
     act(() => result.current.toggleTheme())
     expect(result.current.theme).toBe('light')
-    expect(localStorage.getItem('acopio-theme')).toBe('light')
+    expect(localStorage.getItem('saman-theme')).toBe('light')
     expect(document.documentElement.classList.contains('dark')).toBe(false)
   })
 

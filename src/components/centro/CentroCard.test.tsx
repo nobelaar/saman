@@ -7,6 +7,7 @@ import { CentroCard } from './CentroCard'
 
 const centro: CentroResumen = {
   id: '00000000-0000-0000-0000-000000000001',
+  coordinador_id: '00000000-0000-0000-0000-0000000000aa',
   nombre: 'Centro La Candelaria',
   descripcion: 'Iglesia habilitada',
   ciudad: 'Caracas',

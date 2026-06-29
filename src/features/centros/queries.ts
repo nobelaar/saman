@@ -9,7 +9,7 @@ export function useCentros() {
       const { data, error } = await supabase
         .from('centros_acopio')
         .select(
-          'id, nombre, descripcion, direccion, ciudad, contacto, foto_portada, created_at, posts ( contenido, created_at )'
+          'id, coordinador_id, nombre, descripcion, direccion, ciudad, contacto, foto_portada, created_at, posts ( contenido, created_at )'
         )
         .order('ciudad', { ascending: true })
       if (error) throw error
@@ -22,6 +22,7 @@ export function useCentros() {
 
 interface CentroWithPostsRow {
   id: string
+  coordinador_id: string
   nombre: string
   descripcion: string | null
   direccion: string
@@ -35,6 +36,7 @@ function toCentroResumen(row: CentroWithPostsRow): CentroResumen {
   const ultimo = row.posts?.[0]
   return {
     id: row.id,
+    coordinador_id: row.coordinador_id,
     nombre: row.nombre,
     descripcion: row.descripcion,
     ciudad: row.ciudad,

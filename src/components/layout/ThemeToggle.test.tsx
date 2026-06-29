@@ -24,7 +24,7 @@ describe('ThemeToggle', () => {
   })
 
   it('renders sun icon when in dark mode', () => {
-    localStorage.setItem('acopio-theme', 'dark')
+    localStorage.setItem('saman-theme', 'dark')
     renderToggle()
     expect(screen.getByLabelText('Cambiar a modo claro')).toBeInTheDocument()
   })
@@ -34,7 +34,7 @@ describe('ThemeToggle', () => {
     renderToggle()
     const button = screen.getByLabelText('Cambiar a modo oscuro')
     await user.click(button)
-    expect(localStorage.getItem('acopio-theme')).toBe('dark')
+    expect(localStorage.getItem('saman-theme')).toBe('dark')
     expect(document.documentElement.classList.contains('dark')).toBe(true)
     expect(screen.getByLabelText('Cambiar a modo claro')).toBeInTheDocument()
   })

@@ -21,6 +21,7 @@ export interface Post {
 
 export interface CentroResumen {
   id: string
+  coordinador_id: string
   nombre: string
   descripcion: string | null
   ciudad: string
@@ -87,3 +88,39 @@ export interface PostWithUtil extends Post {
   util_count: number
   user_has_util: boolean
 }
+
+export type AnuncioTipo = 'hospedaje'
+
+export interface Anuncio {
+  id: string
+  tipo: AnuncioTipo
+  titulo: string
+  descripcion: string
+  ciudad: string
+  zona: string | null
+  contacto: string
+  centro_id: string | null
+  user_id: string | null
+  capacidad: number | null
+  duracion: string | null
+  mascotas: boolean
+  accesibilidad: boolean
+  activo: boolean
+  created_at: string
+}
+
+export interface AnuncioWithUtil extends Anuncio {
+  util_count: number
+  user_has_util: boolean
+}
+
+export interface AnuncioUtil {
+  id: string
+  anuncio_id: string
+  user_id: string
+  created_at: string
+}
+
+export type FeedItem =
+  | { kind: 'post'; data: PostWithUtil; centroNombre?: string; centroCiudad?: string }
+  | { kind: 'anuncio'; data: AnuncioWithUtil; centroNombre?: string; centroCiudad?: string }

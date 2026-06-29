@@ -27,9 +27,9 @@ function renderAt(path = '/') {
 }
 
 describe('Navbar', () => {
-  it('shows Acopio brand on the home page', () => {
+  it('shows Saman brand on the home page', () => {
     renderAt('/')
-    expect(screen.getByText(/acopio/i)).toBeInTheDocument()
+    expect(screen.getByText(/saman/i)).toBeInTheDocument()
   })
 
   it('shows a back arrow and page title on sub-pages', () => {

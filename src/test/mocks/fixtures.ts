@@ -1,4 +1,4 @@
-import type { CentroAcopio, Post, CentroResumen, PostUtil, PostComentario, ComentarioUtil, Notificacion } from '@/types/db'
+import type { CentroAcopio, Post, CentroResumen, PostUtil, PostComentario, ComentarioUtil, Notificacion, Anuncio, AnuncioUtil } from '@/types/db'
 
 export const fixtureCentro: CentroAcopio = {
   id: '00000000-0000-0000-0000-000000000001',
@@ -44,6 +44,7 @@ export const fixturePost2: Post = {
 
 export const fixtureCentroResumen: CentroResumen = {
   id: fixtureCentro.id,
+  coordinador_id: fixtureCentro.coordinador_id,
   nombre: fixtureCentro.nombre,
   descripcion: fixtureCentro.descripcion,
   ciudad: fixtureCentro.ciudad,
@@ -98,4 +99,47 @@ export const fixtureNotificacion: Notificacion = {
   tipo: 'comentario',
   leida: false,
   created_at: '2025-01-12T14:00:00.000Z',
+}
+
+export const fixtureAnuncio: Anuncio = {
+  id: 'aaaaaaaa-0000-0000-0000-000000000001',
+  tipo: 'hospedaje',
+  titulo: 'Habitacion disponible en El Hatillo',
+  descripcion: 'Habitacion privada con bano compartido. Cocina disponible.',
+  ciudad: 'Caracas',
+  zona: 'El Hatillo',
+  contacto: '0412-1234567',
+  centro_id: null,
+  user_id: fixtureUser.id,
+  capacidad: 2,
+  duracion: 'Indefinido',
+  mascotas: true,
+  accesibilidad: false,
+  activo: true,
+  created_at: '2025-01-13T10:00:00.000Z',
+}
+
+export const fixtureAnuncio2: Anuncio = {
+  id: 'aaaaaaaa-0000-0000-0000-000000000002',
+  tipo: 'hospedaje',
+  titulo: 'Casa de retiro ofrece alojamiento',
+  descripcion: 'Capacidad para 20 personas. Comedor incluido.',
+  ciudad: 'Valencia',
+  zona: 'Naguanagua',
+  contacto: '0241-0000000',
+  centro_id: fixtureCentro2.id,
+  user_id: null,
+  capacidad: 20,
+  duracion: '1 mes',
+  mascotas: false,
+  accesibilidad: true,
+  activo: true,
+  created_at: '2025-01-13T14:00:00.000Z',
+}
+
+export const fixtureAnuncioUtil: AnuncioUtil = {
+  id: 'uuuuuuuu-0000-0000-0000-000000000003',
+  anuncio_id: fixtureAnuncio.id,
+  user_id: fixtureUser.id,
+  created_at: '2025-01-13T11:00:00.000Z',
 }

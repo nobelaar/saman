@@ -34,7 +34,6 @@ export function useInfinitePostsFeed() {
       let query = supabase
         .from('posts')
         .select('*')
-        .not('centro_id', 'is', null)
         .order('created_at', { ascending: false })
         .limit(PAGE_SIZE)
 

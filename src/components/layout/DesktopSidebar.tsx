@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import type { AuthUser } from '@/types/db'
-import { Home, Search, PlusCircle, User, Users, LogOut } from 'lucide-react'
+import { Home, Search, PlusCircle, User, LogOut } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { NotificationBell } from '@/components/notificacion/NotificationBell'
 import { ThemeToggle } from './ThemeToggle'
@@ -19,12 +19,11 @@ export function DesktopSidebar({ user, onLogout }: Props) {
 
       <nav className="flex flex-1 flex-col gap-1">
         <SidebarItem to="/" icon={Home} label="Inicio" />
-        <SidebarItem to="/comunidad" icon={Users} label="Comunidad" />
         <SidebarItem to="/centros" icon={Search} label="Buscar" />
         <SidebarItem
-          to={user ? '/centros/nuevo' : '/login?redirect=/centros/nuevo'}
+          to={user ? '/anuncio/nuevo' : '/login?redirect=/anuncio/nuevo'}
           icon={PlusCircle}
-          label="Nuevo"
+          label="Publicar"
         />
         <SidebarItem
           to={user ? '/perfil' : '/login'}

@@ -1,4 +1,4 @@
-import { Link, Route, Routes } from 'react-router-dom'
+import { Link, Navigate, Route, Routes } from 'react-router-dom'
 import { useSession } from '@/features/auth/session'
 import { supabase } from '@/lib/supabase'
 import { Navbar } from '@/components/layout/Navbar'
@@ -15,6 +15,7 @@ import { ComunidadPage } from '@/pages/ComunidadPage'
 import { NotificacionesPage } from '@/pages/NotificacionesPage'
 import { NuevoCentroPage } from '@/pages/NuevoCentroPage'
 import { EditarCentroPage } from '@/pages/EditarCentroPage'
+import { NuevoAnuncioPage } from '@/pages/NuevoAnuncioPage'
 import { ToastContainer } from '@/components/toast/ToastContainer'
 
 export default function App() {
@@ -50,6 +51,15 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/anuncio/nuevo"
+            element={
+              <ProtectedRoute user={user} loading={loading}>
+                <NuevoAnuncioPage user={user} />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/comunidad" element={<Navigate to="/" replace />} />
           <Route
             path="*"
             element={

@@ -7,6 +7,7 @@ import { CentroGrid } from './CentroGrid'
 const centros: CentroResumen[] = [
   {
     id: 'c1',
+    coordinador_id: '',
     nombre: 'Centro Uno',
     ciudad: 'Caracas',
     direccion: '',
@@ -18,6 +19,7 @@ const centros: CentroResumen[] = [
   },
   {
     id: 'c2',
+    coordinador_id: '',
     nombre: 'Centro Dos',
     ciudad: 'Valencia',
     direccion: '',
@@ -29,6 +31,7 @@ const centros: CentroResumen[] = [
   },
   {
     id: 'c3',
+    coordinador_id: '',
     nombre: 'Centro Tres',
     ciudad: 'Maracay',
     direccion: '',

@@ -27,7 +27,7 @@ export function Navbar({ user }: Props) {
         ) : (
           <Link to="/" className="flex items-center gap-2 text-primary">
             <HeartHandshake size={22} strokeWidth={2.5} />
-            <span className="text-[17px] font-bold tracking-tight">Acopio</span>
+            <span className="text-[17px] font-bold tracking-tight">Saman</span>
           </Link>
         )}
         <div className="ml-auto flex items-center gap-1">
@@ -45,5 +45,5 @@ function getPageTitle(pathname: string): string {
   if (pathname.startsWith('/centro/')) return 'Centro'
   if (pathname === '/login') return 'Iniciar sesion'
   if (pathname === '/registro') return 'Crear cuenta'
-  return 'Acopio'
+  return 'Saman'
 }
