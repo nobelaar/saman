@@ -37,7 +37,9 @@ export const PostCard = memo(function PostCard({ post, centroNombre, centroCiuda
   }
 
   function handleShare() {
-    const url = `${window.location.origin}/centro/${post.centro_id}`
+    const url = post.centro_id
+      ? `${window.location.origin}/centro/${post.centro_id}`
+      : window.location.origin
     if (navigator.share) {
       navigator.share({ title: 'Publicacion de Acopio', url }).catch(() => {})
     } else {
@@ -47,7 +49,7 @@ export const PostCard = memo(function PostCard({ post, centroNombre, centroCiuda
 
   return (
     <article className="border-b border-border px-4 py-3 transition-colors hover:bg-secondary/30 active:bg-secondary/50">
-      {showCentro && centroNombre && (
+      {showCentro && centroNombre && post.centro_id && (
         <Link
           to={`/centro/${post.centro_id}`}
           className="mb-1 flex items-center gap-2"

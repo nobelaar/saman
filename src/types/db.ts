@@ -12,7 +12,8 @@ export interface CentroAcopio {
 
 export interface Post {
   id: string
-  centro_id: string
+  centro_id: string | null
+  user_id?: string | null
   contenido: string
   foto_url: string | null
   necesidades: string[]

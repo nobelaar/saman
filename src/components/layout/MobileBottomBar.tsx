@@ -70,7 +70,7 @@ export function MobileBottomBar({ user }: Props) {
                 className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-[14px] hover:bg-secondary"
               >
                 <MessageSquareText size={18} />
-                <span>Post de acopio</span>
+                <span>Post</span>
               </button>
             </div>
           )}

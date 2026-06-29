@@ -3,11 +3,11 @@ import { supabase } from '@/lib/supabase'
 import type { Post, PostWithUtil } from '@/types/db'
 
 export interface CrearPostInput {
-  centro_id?: string
+  centro_id?: string | null
   contenido: string
   foto_url?: string | null
   necesidades?: string[]
-  user_id?: string
+  user_id?: string | null
 }
 
 export function useCrearPost() {

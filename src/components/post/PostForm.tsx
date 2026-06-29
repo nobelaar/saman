@@ -5,19 +5,21 @@ import { NecesidadesSelector } from '@/components/common/NecesidadesSelector'
 import { Image } from 'lucide-react'
 
 export interface PostFormValues {
-  centro_id: string
+  centro_id?: string | null
   contenido: string
   foto_url: string | null
   necesidades: string[]
+  user_id?: string | null
 }
 
 interface Props {
-  centroId: string
+  centroId?: string | null
+  userId?: string | null
   onSubmit: (values: PostFormValues) => void
   submitting?: boolean
 }
 
-export function PostForm({ centroId, onSubmit, submitting = false }: Props) {
+export function PostForm({ centroId, userId, onSubmit, submitting = false }: Props) {
   const [contenido, setContenido] = useState('')
   const [foto, setFoto] = useState<string | null>(null)
   const [necesidades, setNecesidades] = useState<string[]>([])
@@ -32,10 +34,11 @@ export function PostForm({ centroId, onSubmit, submitting = false }: Props) {
     }
     setError(null)
     onSubmit({
-      centro_id: centroId,
+      centro_id: centroId ?? null,
       contenido: contenido.trim(),
       foto_url: foto,
       necesidades,
+      user_id: userId ?? null,
     })
     setContenido('')
     setFoto(null)
@@ -61,7 +64,7 @@ export function PostForm({ centroId, onSubmit, submitting = false }: Props) {
             <FotoUploader
               value={foto}
               onChange={setFoto}
-              storagePrefix={centroId}
+              storagePrefix={centroId ?? userId ?? 'user'}
             />
           </div>
           <NecesidadesSelector value={necesidades} onChange={setNecesidades} />

@@ -28,8 +28,8 @@ function mergeFeed(
     ...posts.map((p) => ({
       kind: 'post' as const,
       data: p,
-      centroNombre: centroMap.get(p.centro_id)?.nombre,
-      centroCiudad: centroMap.get(p.centro_id)?.ciudad,
+      centroNombre: p.centro_id ? centroMap.get(p.centro_id)?.nombre : undefined,
+      centroCiudad: p.centro_id ? centroMap.get(p.centro_id)?.ciudad : undefined,
     })),
   ]
   items.sort(
