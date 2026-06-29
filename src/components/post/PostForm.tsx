@@ -52,7 +52,7 @@ export function PostForm({ centroId, userId, onSubmit, submitting = false }: Pro
         value={contenido}
         onChange={(e) => setContenido(e.target.value)}
         rows={3}
-        placeholder="Que necesita este centro?"
+        placeholder="Que queres compartir?"
         className="w-full resize-none bg-transparent text-[15px] leading-relaxed text-foreground placeholder:text-muted-foreground focus:outline-none"
       />
 
