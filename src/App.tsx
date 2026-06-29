@@ -16,6 +16,7 @@ import { NotificacionesPage } from '@/pages/NotificacionesPage'
 import { NuevoCentroPage } from '@/pages/NuevoCentroPage'
 import { EditarCentroPage } from '@/pages/EditarCentroPage'
 import { NuevoAnuncioPage } from '@/pages/NuevoAnuncioPage'
+import { NuevoPostPage } from '@/pages/NuevoPostPage'
 import { ToastContainer } from '@/components/toast/ToastContainer'
 
 export default function App() {
@@ -56,6 +57,14 @@ export default function App() {
             element={
               <ProtectedRoute user={user} loading={loading}>
                 <NuevoAnuncioPage user={user} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/post/nuevo"
+            element={
+              <ProtectedRoute user={user} loading={loading}>
+                <NuevoPostPage user={user} />
               </ProtectedRoute>
             }
           />

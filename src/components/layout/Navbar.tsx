@@ -45,5 +45,7 @@ function getPageTitle(pathname: string): string {
   if (pathname.startsWith('/centro/')) return 'Centro'
   if (pathname === '/login') return 'Iniciar sesion'
   if (pathname === '/registro') return 'Crear cuenta'
+  if (pathname === '/anuncio/nuevo') return 'Nuevo anuncio'
+  if (pathname === '/post/nuevo') return 'Nuevo post'
   return 'Saman'
 }
