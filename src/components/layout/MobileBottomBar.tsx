@@ -47,7 +47,7 @@ export function MobileBottomBar({ user }: Props) {
           <PlusCircle size={22} strokeWidth={2} />
           <span>Publicar</span>
           {publishOpen && (
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 rounded-xl border border-border bg-background shadow-lg p-1">
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 rounded-xl border border-border bg-background shadow-lg p-1 z-40">
               <button
                 type="button"
                 onClick={(e) => {
